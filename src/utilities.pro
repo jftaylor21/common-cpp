@@ -4,29 +4,29 @@ CONFIG -= qt
 
 DEFINES *= UTILITIES_EXPORT
 
-HEADERS *= utilities.h \
-           utilities-enums.h \
-           utilities-thread.h \
-           utilities-mutex.h
+HEADERS *= $$PWD/utilities.h \
+           $$PWD/utilities-enums.h \
+           $$PWD/utilities-thread.h \
+           $$PWD/utilities-mutex.h
 
-SOURCES *= utilities.cpp \
-           utilities-thread.cpp
+SOURCES *= $$PWD/utilities.cpp \
+           $$PWD/utilities-thread.cpp
 
 unix{
-HEADERS *= utilities-linux.h
+HEADERS *= $$PWD/utilities-linux.h
 
-SOURCES *= utilities-linux.cpp \
-           utilities-thread-linux.cpp \
-           utilities-mutex-linux.cpp
+SOURCES *= $$PWD/utilities-linux.cpp \
+           $$PWD/utilities-thread-linux.cpp \
+           $$PWD/utilities-mutex-linux.cpp
 }
 
 win32{
-HEADERS *= utilities-windows.h
+HEADERS *= $$PWD/utilities-windows.h
 
-SOURCES *= utilities-windows.cpp \
-           utilities-thread-windows.cpp \
-           utilities-mutex-windows.cpp
+SOURCES *= $$PWD/utilities-windows.cpp \
+           $$PWD/utilities-thread-windows.cpp \
+           $$PWD/utilities-mutex-windows.cpp
 }
 
-INSTALL_LIB_PATH = ../../
-include(../installlib.pri)
+INSTALL_LIB_PATH = $$PWD/../
+include(../3rdparty/common-qmake/pri/installlib.pri)

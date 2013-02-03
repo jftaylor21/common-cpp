@@ -1,0 +1,3 @@
+[submodule "3rdparty/common-qmake"]
+	path = 3rdparty/common-qmake
+	url = https://github.com/jftaylor21/common-qmake.git
