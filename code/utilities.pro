@@ -29,4 +29,4 @@ SOURCES *= $$PWD/utilities-windows.cpp \
 }
 
 INSTALL_LIB_PATH = $$PWD/../
-include($$PWD/../3rdparty/common-qmake/pri/installlib.pri)
+include($$PWD/3rdparty/common-qmake/pri/installlib.pri)
