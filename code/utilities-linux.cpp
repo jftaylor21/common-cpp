@@ -192,3 +192,16 @@ void Utilities::echo(bool on)
 {
   setTTYMode(TTY_ECHO, on);
 }
+
+void Utilities::clearscreen()
+{
+  if (!cur_term)
+  {
+    int result(0);
+    setupterm(0, STDOUT_FILENO, &result);
+    if (result <= 0)
+    {
+      putp(tigetstr("clear"));
+    }
+  }
+}

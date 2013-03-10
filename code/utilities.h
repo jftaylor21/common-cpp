@@ -57,6 +57,7 @@ namespace Utilities
   bool getKey(Key k);
 
   void echo(bool on);
+  void clearscreen();
 }
 
 #endif
