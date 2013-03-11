@@ -3,7 +3,7 @@
 
 namespace Utilities
 {
-  void nop(){}
+  void nop();
 
   class Callback0
   {

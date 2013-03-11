@@ -11,7 +11,8 @@ HEADERS *= $$PWD/utilities.h \
            $$PWD/utilities-callback.h
 
 SOURCES *= $$PWD/utilities.cpp \
-           $$PWD/utilities-thread.cpp
+           $$PWD/utilities-thread.cpp \
+           $$PWD/utilities-callback.cpp
 
 unix{
 HEADERS *= $$PWD/utilities-linux.h
