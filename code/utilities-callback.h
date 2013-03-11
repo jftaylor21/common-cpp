@@ -3,13 +3,29 @@
 
 namespace Utilities
 {
-  template<typename Object>
   class Callback0
   {
   public:
-    Callback0(Object* o, Function f) : mObject(o), mFunction(f){}
+    Callback0(Function f) : mFunction(f){}
 
-    void operator()() const
+    virtual void operator()() const
+    {
+      *mFunction();
+    }
+
+  private:
+    typedef void *Function();
+
+    Function mFunction;
+  };
+
+  template<typename Object>
+  class ObjectCallback0 : public Callback0
+  {
+  public:
+    ObjectCallback0(Object* o, Function f) : Callback0(f), mObject(o), mFunction(f){}
+
+    virtual void operator()() const
     {
       mObject->*mFunction();
     }
@@ -21,13 +37,30 @@ namespace Utilities
     Function mFunction;
   };
 
-  template<typename Object, typename Arg>
+  template<typename Arg>
   class Callback1
   {
   public:
-    Callback1(Object* o, Function f) : mObject(o), mFunction(f){}
+    Callback1(Function f) : mFunction(f){}
 
-    void operator()(const Arg& a) const
+    virtual void operator()(const Arg& a) const
+    {
+      *mFunction(a);
+    }
+
+  private:
+    typedef void *Function(const Arg&);
+
+    Function mFunction;
+  };
+
+  template<typename Object, typename Arg>
+  class ObjectCallback1 : public Callback1
+  {
+  public:
+    ObjectCallback1(Object* o, Function f) : Callback1(f), mObject(o), mFunction(f){}
+
+    virtual void operator()(const Arg& a) const
     {
       mObject->*mFunction(a);
     }
