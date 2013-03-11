@@ -7,7 +7,8 @@ DEFINES *= UTILITIES_EXPORT
 HEADERS *= $$PWD/utilities.h \
            $$PWD/utilities-enums.h \
            $$PWD/utilities-thread.h \
-           $$PWD/utilities-mutex.h
+           $$PWD/utilities-mutex.h \
+           $$PWD/utilities-callback.h
 
 SOURCES *= $$PWD/utilities.cpp \
            $$PWD/utilities-thread.cpp
