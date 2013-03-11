@@ -3,6 +3,8 @@
 
 namespace Utilities
 {
+  void nop(){}
+
   class Callback0
   {
     typedef void (*Function)();
@@ -27,11 +29,11 @@ namespace Utilities
     Function mFunction;
 
   public:
-    ObjectCallback0(Object* o, Function f) : Callback0(f), mObject(o), mFunction(f){}
+    ObjectCallback0(Object* o, Function f) : Callback0(nop), mObject(o), mFunction(f){}
 
     virtual void operator()() const
     {
-      mObject->*mFunction();
+      (mObject->*mFunction)();
     }
   };
 
@@ -60,11 +62,11 @@ namespace Utilities
     Function mFunction;
 
   public:
-    ObjectCallback1(Object* o, Function f) : Callback1<Arg>(f), mObject(o), mFunction(f){}
+    ObjectCallback1(Object* o, Function f) : Callback1<Arg>(nop), mObject(o), mFunction(f){}
 
     virtual void operator()(const Arg& a) const
     {
-      mObject->*mFunction(a);
+      (mObject->*mFunction)(a);
     }
   };
 }
