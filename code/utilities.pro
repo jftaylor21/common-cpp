@@ -21,7 +21,8 @@ HEADERS *= $$PWD/utilities-linux.h
 
 SOURCES *= $$PWD/utilities-linux.cpp \
            $$PWD/utilities-thread-linux.cpp \
-           $$PWD/utilities-mutex-linux.cpp
+           $$PWD/utilities-mutex-linux.cpp \
+           $$PWD/utilities-socket-linux.cpp
 }
 
 win32{
@@ -29,7 +30,8 @@ HEADERS *= $$PWD/utilities-windows.h
 
 SOURCES *= $$PWD/utilities-windows.cpp \
            $$PWD/utilities-thread-windows.cpp \
-           $$PWD/utilities-mutex-windows.cpp
+           $$PWD/utilities-mutex-windows.cpp \
+           $$PWD/utilities-socket-windows.cpp
 }
 
 win32:LIBS *= -lws2_32
