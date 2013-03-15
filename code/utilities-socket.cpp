@@ -4,6 +4,8 @@ Utilities::Socket::Socket(SocketType type)
   : mType(type),
     mSock(0)
 {
+  initializeOS();
+
   switch(mType)
   {
   case TYPE_UDP:
@@ -15,4 +17,9 @@ Utilities::Socket::Socket(SocketType type)
   default:
     break;
   }
+}
+
+Utilities::Socket::~Socket()
+{
+  finalizeOS();
 }

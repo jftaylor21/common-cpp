@@ -36,6 +36,9 @@ namespace Utilities
     static bool validateIP(const std::string& ip);
 
   private:
+    static void initializeOS();
+    static void finalizeOS();
+
     SocketType mType;
 
 #ifdef WIN32
