@@ -7,12 +7,8 @@ Utilities::Socket Utilities::Socket::accept()
   int saisize(sizeof(sai));
   Socket ret(mType);
   SOCKET accepted(::accept(mSock, reinterpret_cast<SOCKADDR*>(&sai), &saisize));
-  updateLastError();
-  if (accepted == INVALID_SOCKET)
-  {
-    printLastError("Socket::accept: ");
-  }
-  else
+  updateLastError("Socket::accept: ");
+  if (accepted != INVALID_SOCKET)
   {
     ret.mSock = accepted;
     ret.mIP = sai.sin_addr.s_addr;
@@ -24,11 +20,7 @@ Utilities::Socket Utilities::Socket::accept()
 bool Utilities::Socket::close()
 {
   bool ret(!closesocket(mSock));
-  updateLastError();
-  if (!ret)
-  {
-    printLastError("Socket::close");
-  }
+  updateLastError("Socket::close: ");
   return ret;
 }
 
@@ -44,9 +36,13 @@ bool Utilities::Socket::validateIP(const std::string &ip)
   return ret;
 }
 
-void Utilities::Socket::updateLastError()
+void Utilities::Socket::updateLastError(const std::string& prefix)
 {
   mLastError = WSAGetLastError();
+  if (mLastError)
+  {
+    printLastError(prefix);
+  }
 }
 
 void Utilities::Socket::printLastError(const std::string &prefix)

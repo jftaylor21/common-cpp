@@ -38,7 +38,7 @@ namespace Utilities
     static std::string hostIP();
 
   private:
-    void updateLastError();
+    void updateLastError(const std::string& prefix="");
     void printLastError(const std::string& prefix="");
 
     static void initializeOS();
