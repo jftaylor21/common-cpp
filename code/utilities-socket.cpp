@@ -2,6 +2,8 @@
 
 Utilities::Socket::Socket(SocketType type)
   : mType(type),
+    mLastError(0),
+    mPort(0),
     mSock(0)
 {
   initializeOS();
@@ -21,5 +23,11 @@ Utilities::Socket::Socket(SocketType type)
 
 Utilities::Socket::~Socket()
 {
+  close();
   finalizeOS();
+}
+
+int Utilities::Socket::getLastError()
+{
+  return mLastError;
 }

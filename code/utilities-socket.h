@@ -32,14 +32,22 @@ namespace Utilities
     unsigned int recvfrom(char *buf, unsigned int bytes, std::string& ip, unsigned int& port);
     unsigned int send(char* buf, unsigned int bytes);
     unsigned int sendto(char* buf, unsigned int bytes, const std::string& ip, unsigned int port);
+    int getLastError();
 
     static bool validateIP(const std::string& ip);
+    static std::string hostIP();
 
   private:
+    void updateLastError();
+    void printLastError(const std::string& prefix="");
+
     static void initializeOS();
     static void finalizeOS();
 
     SocketType mType;
+    int mLastError;
+    std::string mIP;
+    unsigned int mPort;
 
 #ifdef WIN32
     SOCKET mSock;
