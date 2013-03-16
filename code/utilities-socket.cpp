@@ -67,6 +67,13 @@ bool Utilities::Socket::connect(const std::string &ip, unsigned int port)
   return ret;
 }
 
+bool Utilities::Socket::listen(unsigned int backlog)
+{
+  bool ret(::listen(mSock, backlog) == 0);
+  updateLastError("Socket::listen: ");
+  return ret;
+}
+
 bool Utilities::Socket::validateIP(const std::string &ip)
 {
   unsigned long test;
