@@ -40,6 +40,7 @@ namespace Utilities
   private:
     void updateLastError(const std::string& prefix="");
     void printLastError(const std::string& prefix="");
+    static bool ipstr2int(const std::string& ipstr, unsigned long& ipint);
 
     static void initializeOS();
     static void finalizeOS();

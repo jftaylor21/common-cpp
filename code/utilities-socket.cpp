@@ -27,6 +27,34 @@ Utilities::Socket::~Socket()
   finalizeOS();
 }
 
+bool Utilities::Socket::bind(const std::string &ip, unsigned int port)
+{
+  bool ret(false);
+  sockaddr_in sai;
+  ret = ipstr2int(ip, sai.sin_addr.s_addr);
+  updateLastError("Socket::bind: ");
+  if (ret)
+  {
+    sai.sin_port = htons(port);
+    sai.sin_family = AF_INET;
+    int saisize(sizeof(sai));
+    ret = ::bind(mSock, reinterpret_cast<SOCKADDR*>(&sai), saisize) == 0;
+    updateLastError("Socket::bind: ");
+    if (ret)
+    {
+      mIP = ip;
+      mPort = port;
+    }
+  }
+  return ret;
+}
+
+bool Utilities::Socket::validateIP(const std::string &ip)
+{
+  unsigned long test;
+  return ipstr2int(ip, test);
+}
+
 int Utilities::Socket::getLastError()
 {
   return mLastError;

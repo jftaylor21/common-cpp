@@ -24,16 +24,11 @@ bool Utilities::Socket::close()
   return ret;
 }
 
-bool Utilities::Socket::validateIP(const std::string &ip)
+bool Utilities::Socket::ipstr2int(const std::string &ipstr, unsigned long& ipint)
 {
-  initializeOS();
-  std::wstring wip(ip.begin(), ip.end());
-  SOCKADDR sa;
-  int sasize(sizeof(sa));
-
-  bool ret(WSAStringToAddress(const_cast<WCHAR*>(wip.c_str()), AF_INET, 0, &sa, &sasize) == 0);
-  finalizeOS();
-  return ret;
+  long ret(inet_addr(ipstr.c_str()));
+  ipint = ret;
+  return ret != -1;
 }
 
 void Utilities::Socket::updateLastError(const std::string& prefix)
