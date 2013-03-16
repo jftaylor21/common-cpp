@@ -74,6 +74,14 @@ bool Utilities::Socket::listen(unsigned int backlog)
   return ret;
 }
 
+unsigned int Utilities::Socket::recv(char *buf, unsigned int bytes)
+{
+  unsigned int ret(0);
+  ret = ::recv(mSock, buf, bytes, 0);
+  updateLastError("Socket::recv: ");
+  return ret;
+}
+
 bool Utilities::Socket::validateIP(const std::string &ip)
 {
   unsigned long test;
