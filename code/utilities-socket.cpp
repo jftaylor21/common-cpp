@@ -38,13 +38,31 @@ bool Utilities::Socket::bind(const std::string &ip, unsigned int port)
     sai.sin_port = htons(port);
     sai.sin_family = AF_INET;
     int saisize(sizeof(sai));
-    ret = ::bind(mSock, reinterpret_cast<SOCKADDR*>(&sai), saisize) == 0;
+    ret = ::bind(mSock, reinterpret_cast<sockaddr*>(&sai), saisize) == 0;
     updateLastError("Socket::bind: ");
     if (ret)
     {
       mIP = ip;
       mPort = port;
     }
+  }
+  return ret;
+}
+
+bool Utilities::Socket::connect(const std::string &ip, unsigned int port)
+{
+  bool ret(false);
+  sockaddr_in sai;
+  memset(&sai, 0, sizeof(sockaddr_in));
+  ret = ipstr2int(ip, sai.sin_addr.s_addr);
+  updateLastError("Socket::connect: ");
+  if (ret)
+  {
+    sai.sin_family = AF_INET;
+    sai.sin_port = htons(port);
+    int saisize(sizeof(sai));
+    ret = ::connect(mSock, reinterpret_cast<sockaddr*>(&sai), saisize) == 0;
+    updateLastError("Socket::connect: ");
   }
   return ret;
 }
