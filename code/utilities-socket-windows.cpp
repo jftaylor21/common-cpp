@@ -31,6 +31,20 @@ bool Utilities::Socket::ipstr2int(const std::string &ipstr, unsigned long& ipint
   return ret != -1;
 }
 
+bool Utilities::Socket::ipint2str(unsigned long ipint, std::string &ipstr)
+{
+  bool ret(false);
+  in_addr ina;
+  ina.s_addr = ipint;
+  char* temp(inet_ntoa(ina));
+  if (temp)
+  {
+    ipstr = std::string(temp);
+    ret = true;
+  }
+  return ret;
+}
+
 void Utilities::Socket::updateLastError(const std::string& prefix)
 {
   mLastError = WSAGetLastError();

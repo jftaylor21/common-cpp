@@ -41,6 +41,7 @@ namespace Utilities
     void updateLastError(const std::string& prefix="");
     void printLastError(const std::string& prefix="");
     static bool ipstr2int(const std::string& ipstr, unsigned long& ipint);
+    static bool ipint2str(unsigned long ipint, std::string& ipstr);
 
     static void initializeOS();
     static void finalizeOS();

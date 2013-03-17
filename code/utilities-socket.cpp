@@ -82,6 +82,48 @@ unsigned int Utilities::Socket::recv(char *buf, unsigned int bytes)
   return ret;
 }
 
+unsigned int Utilities::Socket::recvfrom(char *buf, unsigned int bytes,
+                                         std::string &ip, unsigned int &port)
+{
+  unsigned int ret(0);
+  sockaddr_in sai;
+  int saisize(sizeof(sai));
+  ret = ::recvfrom(mSock, buf, bytes, 0, reinterpret_cast<sockaddr*>(&sai), &saisize);
+  updateLastError("Socket::recvfrom: ");
+  if (ret)
+  {
+    ipint2str(sai.sin_addr.s_addr, ip);
+    port = ntohs(sai.sin_port);
+  }
+  return ret;
+}
+
+unsigned int Utilities::Socket::send(char *buf, unsigned int bytes)
+{
+  unsigned int ret(0);
+  ret = ::send(mSock, buf, bytes, 0);
+  updateLastError("Socket::send: ");
+  return ret;
+}
+
+unsigned int Utilities::Socket::sendto(char *buf, unsigned int bytes, const std::string &ip, unsigned int port)
+{
+  unsigned int ret(0);
+  sockaddr_in sai;
+  memset(&sai, 0, sizeof(sockaddr_in));
+  sai.sin_port = htons(port);
+  bool bret(ipstr2int(ip, sai.sin_addr.s_addr));
+  updateLastError("Socket::sendto: ");
+  if (bret)
+  {
+    sai.sin_family = AF_INET;
+    int saisize(sizeof(sai));
+    ret = ::sendto(mSock, buf, bytes, 0, reinterpret_cast<sockaddr*>(&sai), saisize);
+    updateLastError("Socket::sendto: ");
+  }
+  return ret;
+}
+
 bool Utilities::Socket::validateIP(const std::string &ip)
 {
   unsigned long test;
