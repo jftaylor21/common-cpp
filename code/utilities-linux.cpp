@@ -8,11 +8,6 @@
 #include <cstdio>
 #include <iostream>
 
-void Utilities::sleep(unsigned int ms)
-{
-  usleep(ms*1000);
-}
-
 bool Utilities::ttyMode(TTYMode mode)
 {
   bool ret(false);

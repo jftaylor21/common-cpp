@@ -1,14 +1,9 @@
-#include "utilities-windows.h"
+#include "utilities-time.h"
 #include "utilities.h"
 #include <Windows.h>
 #include <conio.h>
 #include <iostream>
 #include <climits>
-
-void Utilities::sleep(unsigned int ms)
-{
-  Sleep(ms);
-}
 
 void Utilities::waitKey()
 {
