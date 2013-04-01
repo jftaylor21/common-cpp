@@ -9,12 +9,17 @@ HEADERS *= $$PWD/utilities.h \
            $$PWD/utilities-thread.h \
            $$PWD/utilities-mutex.h \
            $$PWD/utilities-callback.h \
-           $$PWD/utilities-socket.h
+           $$PWD/utilities-socket.h \
+           $$PWD/utilities-math.h \
+           $$PWD/utilities-conversion.h \
+           $$PWD/utilities-importexport.h
 
 SOURCES *= $$PWD/utilities.cpp \
            $$PWD/utilities-thread.cpp \
            $$PWD/utilities-callback.cpp \
-           $$PWD/utilities-socket.cpp
+           $$PWD/utilities-socket.cpp \
+           $$PWD/utilities-math.cpp \
+           $$PWD/utilities-conversion.cpp
 
 unix{
 HEADERS *= $$PWD/utilities-linux.h
