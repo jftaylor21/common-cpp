@@ -14,7 +14,7 @@ namespace Utilities
   public:
     typedef uint32_t MessageID;
     typedef uint32_t ClientID;
-    typedef Callback3<TokenList> MessageCallback;
+    typedef Callback3<MessageID, ClientID, TokenList> MessageCallback;
 
     StringRPC(bool server);
     ~StringRPC();
