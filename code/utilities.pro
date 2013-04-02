@@ -4,8 +4,7 @@ CONFIG -= qt
 
 DEFINES *= UTILITIES_EXPORT
 
-HEADERS *= $$PWD/utilities.h \
-           $$PWD/utilities-enums.h \
+HEADERS *= $$PWD/utilities-enums.h \
            $$PWD/utilities-thread.h \
            $$PWD/utilities-mutex.h \
            $$PWD/utilities-callback.h \
@@ -13,7 +12,10 @@ HEADERS *= $$PWD/utilities.h \
            $$PWD/utilities-math.h \
            $$PWD/utilities-conversion.h \
            $$PWD/utilities-importexport.h \
-           $$PWD/utilities-time.h
+           $$PWD/utilities-time.h \
+           $$PWD/utilities-keyboard.h \
+           $$PWD/utilities-screen.h \
+           $$PWD/utilities-file.h
 
 SOURCES *= $$PWD/utilities-thread.cpp \
            $$PWD/utilities-callback.cpp \
@@ -22,21 +24,25 @@ SOURCES *= $$PWD/utilities-thread.cpp \
            $$PWD/utilities-conversion.cpp
 
 unix{
-HEADERS *= $$PWD/utilities-linux.h
+HEADERS *= $$PWD/utilities-screen-linux.h \
+           $$PWD/utilities-keyboard-linux.h
 
-SOURCES *= $$PWD/utilities-linux.cpp \
-           $$PWD/utilities-thread-linux.cpp \
+SOURCES *= $$PWD/utilities-thread-linux.cpp \
            $$PWD/utilities-mutex-linux.cpp \
            $$PWD/utilities-socket-linux.cpp \
-           $$PWD/utilities-time-linux.cpp
+           $$PWD/utilities-time-linux.cpp \
+           $$PWD/utilities-keyboard-linux.cpp \
+           $$PWD/utilities-screen-linux.cpp \
+           $$PWD/utilities-file-linux.cpp
 }
 
 win32{
-SOURCES *= $$PWD/utilities-windows.cpp \
-           $$PWD/utilities-thread-windows.cpp \
+SOURCES *= $$PWD/utilities-thread-windows.cpp \
            $$PWD/utilities-mutex-windows.cpp \
            $$PWD/utilities-socket-windows.cpp \
-           $$PWD/utilities-time-windows.cpp
+           $$PWD/utilities-time-windows.cpp \
+           $$PWD/utilities-keyboard-windows.cpp \
+           $$PWD/utilities-screen-windows.cpp
 }
 
 win32:LIBS *= -lws2_32

@@ -1,5 +1,5 @@
-#ifndef UTILITIES_LINUX_H
-#define UTILITIES_LINUX_H
+#ifndef UTILITIES_SCREEN_LINUX_H
+#define UTILITIES_SCREEN_LINUX_H
 
 namespace Utilities
 {
@@ -11,10 +11,6 @@ namespace Utilities
 
   bool ttyMode(TTYMode mode);
   void setTTYMode(TTYMode mode, bool enabled);
-
-  int bytesAvailable(unsigned int fd);
-
-  char getch(bool block);
 }
 
 #endif
