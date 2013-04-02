@@ -15,13 +15,15 @@ HEADERS *= $$PWD/utilities-enums.h \
            $$PWD/utilities-time.h \
            $$PWD/utilities-keyboard.h \
            $$PWD/utilities-screen.h \
-           $$PWD/utilities-file.h
+           $$PWD/utilities-file.h \
+           $$PWD/utilities-tokenizer.h
 
 SOURCES *= $$PWD/utilities-thread.cpp \
            $$PWD/utilities-callback.cpp \
            $$PWD/utilities-socket.cpp \
            $$PWD/utilities-math.cpp \
-           $$PWD/utilities-conversion.cpp
+           $$PWD/utilities-conversion.cpp \
+           $$PWD/utilities-tokenizer.cpp
 
 unix{
 HEADERS *= $$PWD/utilities-screen-linux.h \
