@@ -14,13 +14,14 @@ namespace Utilities
   public:
     typedef uint32_t MessageID;
     typedef uint32_t ClientID;
-    typedef Callback3<MessageID, ClientID, TokenList> MessageCallback;
+    typedef TokenList ArgsList;
+    typedef Callback3<MessageID, ClientID, ArgsList> MessageCallback;
 
     StringRPC(bool server);
     ~StringRPC();
 
     bool initialize(const std::string& ip, unsigned int port);
-    bool send(MessageID type, const TokenList& args, ClientID=0);
+    bool send(MessageID type, const ArgsList& args, ClientID=0);
     void addCallback(MessageID type, MessageCallback callback);
 
   private:
@@ -28,8 +29,8 @@ namespace Utilities
 
     struct Message
     {
-      void encode(MessageID type, ClientID src, const TokenList& args);
-      void decode(MessageID& type, ClientID& src, TokenList& args);
+      void encode(MessageID type, ClientID src, const ArgsList& args);
+      void decode(MessageID& type, ClientID& src, ArgsList& args);
 
       std::string mRawData;
     };
