@@ -3,10 +3,10 @@
 #include <sstream>
 
 Utilities::StringRPC::StringRPC(bool server)
-  : mDeliminator(';'),
+  : mDelimiter(';'),
     mInitialized(false),
     mID(server?CLIENTID_SERVER:CLIENTID_UNKNOWN),
-    mReceiveThread(mDeliminator)
+    mReceiveThread(mDelimiter)
 {
 }
 
@@ -65,22 +65,22 @@ void Utilities::StringRPC::addCallback(MessageID type, MessageCallback callback)
 
 char Utilities::StringRPC::forbiddenCharacter() const
 {
-  return mDeliminator;
+  return mDelimiter;
 }
 
 std::string Utilities::StringRPC::serialize(MessageID type, const ArgsList &args)
 {
   std::stringstream ss;
-  ss << type << mDeliminator << mID << mDeliminator;
+  ss << type << mDelimiter << mID << mDelimiter;
   for(ArgsList::const_iterator it(args.begin()); it != args.end(); ++it)
   {
-    ss << *it << mDeliminator;
+    ss << *it << mDelimiter;
   }
   return ss.str();
 }
 
-Utilities::StringRPC::ReceiveThread::ReceiveThread(char deliminator)
-  : mDeliminator(deliminator),
+Utilities::StringRPC::ReceiveThread::ReceiveThread(char delimiter)
+  : mDelimiter(delimiter),
     mInitialized(false),
     mSock(Socket::TYPE_UDP)
 {

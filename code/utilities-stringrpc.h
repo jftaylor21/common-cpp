@@ -55,7 +55,7 @@ namespace Utilities
     class ReceiveThread : public Thread
     {
     public:
-      ReceiveThread(char deliminator);
+      ReceiveThread(char delimiter);
 
       bool initialize(const std::string &ip, unsigned int port);
       bool initialize(unsigned long ip, unsigned int port);
@@ -67,7 +67,7 @@ namespace Utilities
     private:
       typedef std::map<MessageID, MessageCallback> CallbackMap;
 
-      const char mDeliminator;
+      const char mDelimiter;
       bool mInitialized;
       Socket mSock;
       Mutex mCallbackMutex;
@@ -78,7 +78,7 @@ namespace Utilities
 
     std::string serialize(MessageID type, const ArgsList& args);
 
-    const char mDeliminator;
+    const char mDelimiter;
     bool mInitialized;
     ClientID mID;
     IPPortMap mNetwork;
