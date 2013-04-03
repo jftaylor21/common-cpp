@@ -71,10 +71,10 @@ char Utilities::StringRPC::forbiddenCharacter() const
 std::string Utilities::StringRPC::serialize(MessageID type, const ArgsList &args)
 {
   std::stringstream ss;
-  ss << type << mDelimiter << mID << mDelimiter;
+  ss << type << mDelimiter << mID;
   for(ArgsList::const_iterator it(args.begin()); it != args.end(); ++it)
   {
-    ss << *it << mDelimiter;
+    ss << mDelimiter << *it;
   }
   return ss.str();
 }
