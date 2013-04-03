@@ -7,6 +7,8 @@
 #include "utilities-tokenizer.h"
 #include "utilities-callback.h"
 #include "utilities-socket.h"
+#include "utilities-mutex.h"
+#include "utilities-thread.h"
 
 namespace Utilities
 {
@@ -22,8 +24,9 @@ namespace Utilities
 
     enum ReservedClientID
     {
-      CLIENTID_SERVER = 0,
-      CLIENTID_UNKNOWN = -1
+      CLIENTID_UNKNOWN = 0,
+      CLIENTID_SERVER = 1,
+      CLIENTID_BROADCAST = 2
     };
 
     typedef uint32_t MessageID;
@@ -49,7 +52,28 @@ namespace Utilities
       unsigned int port;
     };
 
-    typedef std::map<MessageID, MessageCallback> CallbackMap;
+    class ReceiveThread : public Thread
+    {
+    public:
+      ReceiveThread(char deliminator);
+
+      bool initialize(const std::string &ip, unsigned int port);
+      bool initialize(unsigned long ip, unsigned int port);
+      void addCallback(MessageID type, MessageCallback callback);
+
+    protected:
+      virtual void run();
+
+    private:
+      typedef std::map<MessageID, MessageCallback> CallbackMap;
+
+      const char mDeliminator;
+      bool mInitialized;
+      Socket mSock;
+      Mutex mCallbackMutex;
+      CallbackMap mCallbacks;
+    };
+
     typedef std::map<ClientID, IPPort> IPPortMap;
 
     std::string serialize(MessageID type, const ArgsList& args);
@@ -57,9 +81,8 @@ namespace Utilities
     const char mDeliminator;
     bool mInitialized;
     ClientID mID;
-    CallbackMap mCallbacks;
-    Socket mSock;
     IPPortMap mNetwork;
+    ReceiveThread mReceiveThread;
   };
 }
 
