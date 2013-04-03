@@ -16,7 +16,8 @@ namespace Utilities
     enum ReservedMessageID
     {
       MESSAGEID_REGISTER = 0,
-      MESSAGEID_ACKREGISTER = 1
+      MESSAGEID_ACKREGISTER = 1,
+      MESSAGEID_DEREGISTER = 2
     };
 
     enum ReservedClientID
@@ -36,6 +37,7 @@ namespace Utilities
     bool initialize(const std::string& serverIP, unsigned int serverPort);
     bool send(MessageID type, const ArgsList& args, ClientID=0);
     void addCallback(MessageID type, MessageCallback callback);
+    char forbiddenCharacter() const;
 
   private:
     struct IPPort
@@ -50,6 +52,9 @@ namespace Utilities
     typedef std::map<MessageID, MessageCallback> CallbackMap;
     typedef std::map<ClientID, IPPort> IPPortMap;
 
+    std::string serialize(MessageID type, const ArgsList& args);
+
+    const char mDeliminator;
     bool mInitialized;
     ClientID mID;
     CallbackMap mCallbacks;
