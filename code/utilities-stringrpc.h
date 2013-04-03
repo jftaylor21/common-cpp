@@ -6,12 +6,25 @@
 #include <map>
 #include "utilities-tokenizer.h"
 #include "utilities-callback.h"
+#include "utilities-socket.h"
 
 namespace Utilities
 {
   class StringRPC
   {
   public:
+    enum ReservedMessageID
+    {
+      MESSAGEID_REGISTER = 0,
+      MESSAGEID_ACKREGISTER = 1
+    };
+
+    enum ReservedClientID
+    {
+      CLIENTID_SERVER = 0,
+      CLIENTID_UNKNOWN = -1
+    };
+
     typedef uint32_t MessageID;
     typedef uint32_t ClientID;
     typedef TokenList ArgsList;
@@ -20,25 +33,28 @@ namespace Utilities
     StringRPC(bool server);
     ~StringRPC();
 
-    bool initialize(const std::string& ip, unsigned int port);
+    bool initialize(const std::string& serverIP, unsigned int serverPort);
     bool send(MessageID type, const ArgsList& args, ClientID=0);
     void addCallback(MessageID type, MessageCallback callback);
 
   private:
-    typedef std::map<MessageID, MessageCallback> CallbackMap;
-
-    struct Message
+    struct IPPort
     {
-      void encode(MessageID type, ClientID src, const ArgsList& args);
-      void decode(MessageID& type, ClientID& src, ArgsList& args);
+      IPPort() : port(0) {}
+      IPPort(const std::string& ipin, unsigned int portin) : ip(ipin), port(portin) {}
 
-      std::string mRawData;
+      std::string ip;
+      unsigned int port;
     };
 
+    typedef std::map<MessageID, MessageCallback> CallbackMap;
+    typedef std::map<ClientID, IPPort> IPPortMap;
+
+    bool mInitialized;
     ClientID mID;
-    std::string mIP;
-    unsigned int mPort;
     CallbackMap mCallbacks;
+    Socket mSock;
+    IPPortMap mNetwork;
   };
 }
 
