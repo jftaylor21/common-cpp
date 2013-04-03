@@ -25,6 +25,7 @@ namespace Utilities
 
     Socket accept();
     bool bind(const std::string& ip, unsigned int port);
+    bool bind(unsigned long ip, unsigned int port);
     bool close();
     bool connect(const std::string& ip, unsigned int port);
     bool listen(unsigned int backlog);

@@ -30,21 +30,30 @@ Utilities::Socket::~Socket()
 bool Utilities::Socket::bind(const std::string &ip, unsigned int port)
 {
   bool ret(false);
-  sockaddr_in sai;
-  ret = ipstr2int(ip, sai.sin_addr.s_addr);
+  unsigned long ipint(INADDR_NONE);
+  ret = ipstr2int(ip, ipint);
   updateLastError("Socket::bind: ");
   if (ret)
   {
-    sai.sin_port = htons(port);
-    sai.sin_family = AF_INET;
-    int saisize(sizeof(sai));
-    ret = ::bind(mSock, reinterpret_cast<sockaddr*>(&sai), saisize) == 0;
-    updateLastError("Socket::bind: ");
-    if (ret)
-    {
-      mIP = ip;
-      mPort = port;
-    }
+    ret = bind(ipint, port);
+  }
+  return ret;
+}
+
+bool Utilities::Socket::bind(unsigned long ip, unsigned int port)
+{
+  bool ret(false);
+  sockaddr_in sai;
+  sai.sin_addr.s_addr = ip;
+  sai.sin_port = htons(port);
+  sai.sin_family = AF_INET;
+  int saisize(sizeof(sai));
+  ret = ::bind(mSock, reinterpret_cast<sockaddr*>(&sai), saisize) == 0;
+  updateLastError("Socket::bind: ");
+  if (ret)
+  {
+    mIP = ip;
+    mPort = port;
   }
   return ret;
 }
