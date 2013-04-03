@@ -107,7 +107,7 @@ unsigned int Utilities::Socket::recvfrom(char *buf, unsigned int bytes,
   return ret;
 }
 
-unsigned int Utilities::Socket::send(char *buf, unsigned int bytes)
+unsigned int Utilities::Socket::send(const char *buf, unsigned int bytes)
 {
   unsigned int ret(0);
   ret = ::send(mSock, buf, bytes, 0);
@@ -115,7 +115,7 @@ unsigned int Utilities::Socket::send(char *buf, unsigned int bytes)
   return ret;
 }
 
-unsigned int Utilities::Socket::sendto(char *buf, unsigned int bytes, const std::string &ip, unsigned int port)
+unsigned int Utilities::Socket::sendto(const char *buf, unsigned int bytes, const std::string &ip, unsigned int port)
 {
   unsigned int ret(0);
   sockaddr_in sai;

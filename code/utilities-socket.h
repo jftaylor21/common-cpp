@@ -31,8 +31,8 @@ namespace Utilities
     bool listen(unsigned int backlog);
     unsigned int recv(char* buf, unsigned int bytes);
     unsigned int recvfrom(char *buf, unsigned int bytes, std::string& ip, unsigned int& port);
-    unsigned int send(char* buf, unsigned int bytes);
-    unsigned int sendto(char* buf, unsigned int bytes, const std::string& ip, unsigned int port);
+    unsigned int send(const char* buf, unsigned int bytes);
+    unsigned int sendto(const char* buf, unsigned int bytes, const std::string& ip, unsigned int port);
     int getLastError();
 
     static bool validateIP(const std::string& ip);
