@@ -20,7 +20,7 @@ bool Utilities::StringRPC::initialize(const std::string &serverIP,
 {
   if (!mInitialized)
   {
-    if (mID == CLIENTID_UNKNOWN)
+    if (mID == CLIENTID_UNKNOWN) //i am a client
     {
       if (mReceiveThread.initialize(INADDR_ANY, 0))
       {
@@ -37,7 +37,7 @@ bool Utilities::StringRPC::initialize(const std::string &serverIP,
         }
       }
     }
-    else
+    else //i am a server
     {
       if (mReceiveThread.initialize(serverIP, serverPort))
       {

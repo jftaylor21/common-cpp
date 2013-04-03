@@ -42,6 +42,8 @@ namespace Utilities
     void addCallback(MessageID type, MessageCallback callback);
     char forbiddenCharacter() const;
 
+    void registerCallback(MessageID msg, ClientID cl, const ArgsList& args);
+
   private:
     struct IPPort
     {
