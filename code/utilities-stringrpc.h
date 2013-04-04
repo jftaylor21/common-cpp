@@ -34,6 +34,12 @@ namespace Utilities
     typedef TokenList ArgsList;
     typedef Callback3<MessageID, ClientID, ArgsList> MessageCallback;
 
+    template<typename Object>
+    struct MessageObjectCallback : public ObjectCallback3<Object, MessageID, ClientID, ArgsList>
+    {
+      MessageObjectCallback(Object* o, typename ObjectCallback3<Object, MessageID, ClientID, ArgsList>::Function f) : ObjectCallback3<Object, MessageID, ClientID, ArgsList>(o, f){}
+    };
+
     StringRPC(bool server);
     ~StringRPC();
 
@@ -42,7 +48,7 @@ namespace Utilities
     void addCallback(MessageID type, MessageCallback callback);
     char forbiddenCharacter() const;
 
-    void registerCallback(MessageID msg, ClientID cl, const ArgsList& args);
+    void onRegisterCallback(const MessageID& msg, const ClientID& cl, const ArgsList& args);
 
   private:
     struct IPPort
