@@ -83,23 +83,23 @@ bool Utilities::Socket::listen(unsigned int backlog)
   return ret;
 }
 
-unsigned int Utilities::Socket::recv(char *buf, unsigned int bytes)
+int Utilities::Socket::recv(char *buf, unsigned int bytes)
 {
-  unsigned int ret(0);
+  int ret(0);
   ret = ::recv(mSock, buf, bytes, 0);
   updateLastError("Socket::recv: ");
   return ret;
 }
 
-unsigned int Utilities::Socket::recvfrom(char *buf, unsigned int bytes,
+int Utilities::Socket::recvfrom(char *buf, unsigned int bytes,
                                          std::string &ip, unsigned int &port)
 {
-  unsigned int ret(0);
+  int ret(0);
   sockaddr_in sai;
   int saisize(sizeof(sai));
   ret = ::recvfrom(mSock, buf, bytes, 0, reinterpret_cast<sockaddr*>(&sai), &saisize);
   updateLastError("Socket::recvfrom: ");
-  if (ret)
+  if (ret > 0)
   {
     ipint2str(sai.sin_addr.s_addr, ip);
     port = ntohs(sai.sin_port);
@@ -107,17 +107,17 @@ unsigned int Utilities::Socket::recvfrom(char *buf, unsigned int bytes,
   return ret;
 }
 
-unsigned int Utilities::Socket::send(const char *buf, unsigned int bytes)
+int Utilities::Socket::send(const char *buf, unsigned int bytes)
 {
-  unsigned int ret(0);
+  int ret(0);
   ret = ::send(mSock, buf, bytes, 0);
   updateLastError("Socket::send: ");
   return ret;
 }
 
-unsigned int Utilities::Socket::sendto(const char *buf, unsigned int bytes, const std::string &ip, unsigned int port)
+int Utilities::Socket::sendto(const char *buf, unsigned int bytes, const std::string &ip, unsigned int port)
 {
-  unsigned int ret(0);
+  int ret(0);
   sockaddr_in sai;
   memset(&sai, 0, sizeof(sockaddr_in));
   sai.sin_port = htons(port);
