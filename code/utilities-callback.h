@@ -1,10 +1,19 @@
-#ifndef CALLBACK_H
-#define CALLBACK_H
+#ifndef UTILITIES_CALLBACK_H
+#define UTILITIES_CALLBACK_H
 #include <iostream>
 
 namespace Utilities
 {
   void nop();
+
+  template<typename Arg>
+  void nop1(const Arg&){}
+
+  template<typename Arg1, typename Arg2>
+  void nop2(const Arg1&, const Arg2&){}
+
+  template<typename Arg1, typename Arg2, typename Arg3>
+  void nop3(const Arg1&, const Arg2&, const Arg3&){}
 
   class Callback0
   {
@@ -78,7 +87,7 @@ namespace Utilities
   public:
     typedef void (Object::*Function)(const Arg&);
 
-    ObjectCallback1(Object* o, Function f) : Callback1<Arg>(nop), mObject(o), mFunction(f){}
+    ObjectCallback1(Object* o, Function f) : Callback1<Arg>(nop1), mObject(o), mFunction(f){}
 
     virtual ObjectCallback1* clone() const
     {
@@ -123,7 +132,7 @@ namespace Utilities
   public:
     typedef void (Object::*Function)(const Arg1&, const Arg2&);
 
-    ObjectCallback2(Object* o, Function f) : Callback2<Arg1, Arg2>(nop), mObject(o), mFunction(f){}
+    ObjectCallback2(Object* o, Function f) : Callback2<Arg1, Arg2>(nop2), mObject(o), mFunction(f){}
 
     virtual ObjectCallback2* clone() const
     {
@@ -168,7 +177,7 @@ namespace Utilities
   public:
     typedef void (Object::*Function)(const Arg1&, const Arg2&, const Arg3&);
 
-    ObjectCallback3(Object* o, Function f) : Callback3<Arg1, Arg2, Arg3>(nop), mObject(o), mFunction(f){}
+    ObjectCallback3(Object* o, Function f) : Callback3<Arg1, Arg2, Arg3>(nop3), mObject(o), mFunction(f){}
 
     virtual ObjectCallback3* clone() const
     {
