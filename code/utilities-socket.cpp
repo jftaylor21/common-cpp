@@ -1,4 +1,5 @@
 #include "utilities-socket.h"
+#include "utilities-conversion.h"
 
 Utilities::Socket::Socket(SocketType type)
   : mType(type),
@@ -131,6 +132,17 @@ int Utilities::Socket::sendto(const char *buf, unsigned int bytes, const std::st
     updateLastError("Socket::sendto: ");
   }
   return ret;
+}
+
+std::string Utilities::Socket::hostIP() const
+{
+  return mIP + ":" + Utilities::toString(mPort);
+}
+
+void Utilities::Socket::hostIP(std::string &ip, unsigned int &port) const
+{
+  ip = mIP;
+  port = mPort;
 }
 
 bool Utilities::Socket::validateIP(const std::string &ip)
