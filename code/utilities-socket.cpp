@@ -146,10 +146,14 @@ std::string Utilities::Socket::hostIP() const
   return mIP + ":" + Utilities::toString(mPort);
 }
 
-void Utilities::Socket::hostIP(std::string &ip, unsigned int &port) const
+std::string Utilities::Socket::ip() const
 {
-  ip = mIP;
-  port = mPort;
+  return mIP;
+}
+
+unsigned int Utilities::Socket::port() const
+{
+  return mPort;
 }
 
 bool Utilities::Socket::validateIP(const std::string &ip)

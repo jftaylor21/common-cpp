@@ -36,7 +36,8 @@ namespace Utilities
     int sendto(const char* buf, unsigned int bytes, const std::string& ip, unsigned int port);
     int getLastError();
     std::string hostIP() const;
-    void hostIP(std::string& ip, unsigned int& port) const;
+    std::string ip() const;
+    unsigned int port() const;
 
     static bool validateIP(const std::string& ip);
 
