@@ -26,17 +26,15 @@ bool Utilities::StringRPC::initialize(const std::string &serverIP,
     {
       if (mReceiveThread.initialize(INADDR_ANY, 0))
       {
+        mReceiveThread.addCallback(MESSAGEID_ACKREGISTER, MessageObjectCallback<StringRPC>(this, &StringRPC::onAckRegisterCallback));
         mReceiveThread.start();
+        mNetwork[CLIENTID_SERVER] = IPPort(serverIP, serverPort);
         mInitialized = true;
 
         ArgsList args;
-        std::string registerMsg(serialize(MESSAGEID_REGISTER, args));
-        Socket sock(Socket::TYPE_UDP);
-        if (sock.sendto(registerMsg.c_str(), registerMsg.length(), serverIP, serverPort))
-        {
-          IPPort server(serverIP, serverPort);
-          mNetwork[CLIENTID_SERVER] = server;
-        }
+        args.push_back(mReceiveThread.ip());
+        args.push_back(Utilities::toString(mReceiveThread.port()));
+        send(MESSAGEID_REGISTER, args, CLIENTID_SERVER);
       }
     }
     else //i am a server
@@ -52,11 +50,27 @@ bool Utilities::StringRPC::initialize(const std::string &serverIP,
   return mInitialized;
 }
 
-bool Utilities::StringRPC::send(MessageID type, const ArgsList &args, ClientID)
+bool Utilities::StringRPC::send(MessageID type, const ArgsList &args, ClientID id)
 {
   bool ret(false);
-  if (mInitialized)
+  if (id == CLIENTID_BROADCAST)
   {
+    IPPortMap::const_iterator it(mNetwork.begin());
+    for(; it != mNetwork.end(); ++it)
+    {
+      if (it->first != mID)
+      {
+        send(type, args, it->first);
+      }
+    }
+  }
+  else if (mInitialized &&
+           mNetwork.count(id) &&
+           (mID != CLIENTID_UNKNOWN || type == MESSAGEID_REGISTER))
+  {
+    std::string data(serialize(type, args));
+    Socket sock(Socket::TYPE_UDP);
+    sock.sendto(data.c_str(), data.size()+1, mNetwork[id].ip, mNetwork[id].port);
   }
   return ret;
 }
@@ -70,6 +84,27 @@ void Utilities::StringRPC::onRegisterCallback(const MessageID &msg,
                                               const ClientID &cl,
                                               const ArgsList &args)
 {
+  if (args.size() == 2)
+  {
+    std::string ip(args[0]);
+    unsigned int port(Utilities::toInt(args[1]));
+    ClientID id(mNetwork.size()+CLIENTID_BROADCAST);
+    mNetwork[id] = IPPort(ip, port);
+
+    ArgsList alist;
+    alist.push_back(Utilities::toString(id));
+    send(MESSAGEID_ACKREGISTER, alist, id);
+  }
+}
+
+void Utilities::StringRPC::onAckRegisterCallback(const MessageID &msg,
+                                                 const ClientID &id,
+                                                 const ArgsList &args)
+{
+  if (args.size() == 1)
+  {
+    mID = Utilities::toInt(args[0]);
+  }
 }
 
 char Utilities::StringRPC::forbiddenCharacter() const
@@ -93,6 +128,16 @@ Utilities::StringRPC::ReceiveThread::ReceiveThread(char delimiter)
     mInitialized(false),
     mSock(Socket::TYPE_UDP)
 {
+}
+
+Utilities::StringRPC::ReceiveThread::~ReceiveThread()
+{
+  mSock.close();
+  for (CallbackMap::iterator it(mCallbacks.begin()); it != mCallbacks.end(); ++it)
+  {
+    delete it->second;
+    it->second = 0;
+  }
 }
 
 bool Utilities::StringRPC::ReceiveThread::initialize(const std::string &ip, unsigned int port)
@@ -134,6 +179,16 @@ void Utilities::StringRPC::ReceiveThread::addCallback(MessageID type, const Mess
   mCallbackMutex.unlock();
 }
 
+std::string Utilities::StringRPC::ReceiveThread::ip() const
+{
+  return mSock.ip();
+}
+
+unsigned int Utilities::StringRPC::ReceiveThread::port() const
+{
+  return mSock.port();
+}
+
 void Utilities::StringRPC::ReceiveThread::run()
 {
   while(mRunning)
@@ -152,12 +207,6 @@ void Utilities::StringRPC::ReceiveThread::run()
         if(t.size() > 2)
         {
           args = StringRPC::ArgsList(t.begin()+2, t.end());
-        }
-
-        if (type == StringRPC::MESSAGEID_REGISTER)
-        {
-          args.push_back(ip);
-          args.push_back(Utilities::toString(port));
         }
 
         if (mCallbacks.count(type))

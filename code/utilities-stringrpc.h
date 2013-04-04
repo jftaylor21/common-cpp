@@ -44,11 +44,12 @@ namespace Utilities
     ~StringRPC();
 
     bool initialize(const std::string& serverIP, unsigned int serverPort);
-    bool send(MessageID type, const ArgsList& args, ClientID=0);
+    bool send(MessageID type, const ArgsList& args, ClientID id=0);
     void addCallback(MessageID type, const MessageCallback& callback);
     char forbiddenCharacter() const;
 
     void onRegisterCallback(const MessageID& msg, const ClientID& cl, const ArgsList& args);
+    void onAckRegisterCallback(const MessageID& msg, const ClientID& id, const ArgsList& args);
 
   private:
     struct IPPort
@@ -64,10 +65,13 @@ namespace Utilities
     {
     public:
       ReceiveThread(char delimiter);
+      ~ReceiveThread();
 
       bool initialize(const std::string &ip, unsigned int port);
       bool initialize(unsigned long ip, unsigned int port);
       void addCallback(MessageID type, const MessageCallback& callback);
+      std::string ip() const;
+      unsigned int port() const;
 
     protected:
       virtual void run();
