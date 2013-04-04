@@ -41,6 +41,7 @@ bool Utilities::StringRPC::initialize(const std::string &serverIP,
     {
       if (mReceiveThread.initialize(serverIP, serverPort))
       {
+        mReceiveThread.addCallback(MESSAGEID_REGISTER, MessageObjectCallback<StringRPC>(this, &StringRPC::onRegisterCallback));
         mReceiveThread.start();
         mInitialized = true;
       }
@@ -61,6 +62,12 @@ bool Utilities::StringRPC::send(MessageID type, const ArgsList &args, ClientID)
 void Utilities::StringRPC::addCallback(MessageID type, MessageCallback callback)
 {
   mReceiveThread.addCallback(type, callback);
+}
+
+void Utilities::StringRPC::onRegisterCallback(const MessageID &msg,
+                                              const ClientID &cl,
+                                              const ArgsList &args)
+{
 }
 
 char Utilities::StringRPC::forbiddenCharacter() const
