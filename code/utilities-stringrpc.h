@@ -45,7 +45,7 @@ namespace Utilities
 
     bool initialize(const std::string& serverIP, unsigned int serverPort);
     bool send(MessageID type, const ArgsList& args, ClientID=0);
-    void addCallback(MessageID type, MessageCallback callback);
+    void addCallback(MessageID type, const MessageCallback& callback);
     char forbiddenCharacter() const;
 
     void onRegisterCallback(const MessageID& msg, const ClientID& cl, const ArgsList& args);
@@ -67,13 +67,13 @@ namespace Utilities
 
       bool initialize(const std::string &ip, unsigned int port);
       bool initialize(unsigned long ip, unsigned int port);
-      void addCallback(MessageID type, MessageCallback callback);
+      void addCallback(MessageID type, const MessageCallback& callback);
 
     protected:
       virtual void run();
 
     private:
-      typedef std::map<MessageID, MessageCallback> CallbackMap;
+      typedef std::map<MessageID, MessageCallback*> CallbackMap;
 
       const char mDelimiter;
       bool mInitialized;

@@ -1,4 +1,6 @@
 #include "utilities-stringrpc.h"
+#include "utilities-time.h"
+#include "utilities-conversion.h"
 #include <iostream>
 #include <sstream>
 
@@ -59,7 +61,7 @@ bool Utilities::StringRPC::send(MessageID type, const ArgsList &args, ClientID)
   return ret;
 }
 
-void Utilities::StringRPC::addCallback(MessageID type, MessageCallback callback)
+void Utilities::StringRPC::addCallback(MessageID type, const MessageCallback& callback)
 {
   mReceiveThread.addCallback(type, callback);
 }
@@ -117,7 +119,7 @@ bool Utilities::StringRPC::ReceiveThread::initialize(unsigned long ip, unsigned 
   return mInitialized;
 }
 
-void Utilities::StringRPC::ReceiveThread::addCallback(MessageID type, MessageCallback callback)
+void Utilities::StringRPC::ReceiveThread::addCallback(MessageID type, const MessageCallback& callback)
 {
   mCallbackMutex.lock();
   if (mCallbacks.count(type))
@@ -127,11 +129,43 @@ void Utilities::StringRPC::ReceiveThread::addCallback(MessageID type, MessageCal
   }
   else
   {
-    mCallbacks.insert(std::pair<MessageID, MessageCallback>(type, callback));
+    mCallbacks.insert(std::pair<MessageID, MessageCallback*>(type, callback.clone()));
   }
   mCallbackMutex.unlock();
 }
 
 void Utilities::StringRPC::ReceiveThread::run()
 {
+  while(mRunning)
+  {
+    char buf[4096];
+    std::string ip;
+    unsigned int port(0);
+    if (mSock.recvfrom(buf, sizeof(buf), ip, port) > 0)
+    {
+      Utilities::TokenList t(Utilities::tokenize(buf, mDelimiter));
+      if (t.size() > 1)
+      {
+        StringRPC::MessageID type(Utilities::toInt(t[0]));
+        StringRPC::ClientID id(Utilities::toInt(t[1]));
+        StringRPC::ArgsList args;
+        if(t.size() > 2)
+        {
+          args = StringRPC::ArgsList(t.begin()+2, t.end());
+        }
+
+        if (type == StringRPC::MESSAGEID_REGISTER)
+        {
+          args.push_back(ip);
+          args.push_back(Utilities::toString(port));
+        }
+
+        if (mCallbacks.count(type))
+        {
+          (*mCallbacks[type])(type, id, args);
+        }
+      }
+    }
+    Utilities::sleep(100);
+  }
 }
