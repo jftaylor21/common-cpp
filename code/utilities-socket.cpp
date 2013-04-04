@@ -53,7 +53,7 @@ bool Utilities::Socket::bind(unsigned long ip, unsigned int port)
   updateLastError("Socket::bind: ");
   if (ret)
   {
-    mIP = ip;
+    ipint2str(ip, mIP);
     mPort = port;
   }
   return ret;
