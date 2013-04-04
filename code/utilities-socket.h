@@ -30,6 +30,7 @@ namespace Utilities
     bool connect(const std::string& ip, unsigned int port);
     bool listen(unsigned int backlog);
     int recv(char* buf, unsigned int bytes);
+    int recvfrom(char* buf, unsigned int bytes);
     int recvfrom(char *buf, unsigned int bytes, std::string& ip, unsigned int& port);
     int send(const char* buf, unsigned int bytes);
     int sendto(const char* buf, unsigned int bytes, const std::string& ip, unsigned int port);

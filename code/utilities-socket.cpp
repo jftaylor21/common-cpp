@@ -92,6 +92,13 @@ int Utilities::Socket::recv(char *buf, unsigned int bytes)
   return ret;
 }
 
+int Utilities::Socket::recvfrom(char *buf, unsigned int bytes)
+{
+  std::string ip;
+  unsigned int port;
+  return recvfrom(buf, bytes, ip, port);
+}
+
 int Utilities::Socket::recvfrom(char *buf, unsigned int bytes,
                                          std::string &ip, unsigned int &port)
 {
