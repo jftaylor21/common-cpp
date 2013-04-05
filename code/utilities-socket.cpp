@@ -36,25 +36,20 @@ bool Utilities::Socket::bind(const std::string &ip, unsigned int port)
   updateLastError("Socket::bind: ");
   if (ret)
   {
-    ret = bind(ipint, port);
-  }
-  return ret;
-}
-
-bool Utilities::Socket::bind(unsigned long ip, unsigned int port)
-{
-  bool ret(false);
-  sockaddr_in sai;
-  sai.sin_addr.s_addr = ip;
-  sai.sin_port = htons(port);
-  sai.sin_family = AF_INET;
-  int saisize(sizeof(sai));
-  ret = ::bind(mSock, reinterpret_cast<sockaddr*>(&sai), saisize) == 0;
-  updateLastError("Socket::bind: ");
-  if (ret)
-  {
-    ipint2str(ip, mIP);
-    mPort = port;
+    sockaddr_in sai;
+    sai.sin_addr.s_addr = ipint;
+    sai.sin_port = htons(port);
+    sai.sin_family = AF_INET;
+    int saisize(sizeof(sai));
+    ret = ::bind(mSock, reinterpret_cast<sockaddr*>(&sai), saisize) == 0;
+    updateLastError("Socket::bind: ");
+    if (ret)
+    {
+      getsockname(mSock, reinterpret_cast<sockaddr*>(&sai), &saisize);
+      updateLastError("Socket::bind: ");
+      ipint2str(sai.sin_addr.s_addr, mIP);
+      mPort = ntohs(sai.sin_port);
+    }
   }
   return ret;
 }
