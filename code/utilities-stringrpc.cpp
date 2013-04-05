@@ -24,7 +24,9 @@ bool Utilities::StringRPC::initialize(const std::string &serverIP,
   {
     if (mID == CLIENTID_UNKNOWN) //i am a client
     {
-      if (mReceiveThread.initialize(INADDR_ANY, 0))
+      std::string localip;
+      Utilities::Socket::localIP(localip);
+      if (mReceiveThread.initialize(localip, 0))
       {
         mReceiveThread.addCallback(MESSAGEID_ACKREGISTER, MessageObjectCallback<StringRPC>(this, &StringRPC::onAckRegisterCallback));
         mReceiveThread.start();
@@ -72,6 +74,11 @@ bool Utilities::StringRPC::send(MessageID type, const ArgsList &args, ClientID i
     Socket sock(Socket::TYPE_UDP);
     sock.sendto(data.c_str(), data.size()+1, mNetwork[id].ip, mNetwork[id].port);
   }
+  else
+  {
+    std::cout << "StringRPC: Cannot send message due to conditions not met"
+              << std::endl;
+  }
   return ret;
 }
 
@@ -88,8 +95,10 @@ void Utilities::StringRPC::onRegisterCallback(const MessageID &msg,
   {
     std::string ip(args[0]);
     unsigned int port(Utilities::toInt(args[1]));
-    ClientID id(mNetwork.size()+CLIENTID_BROADCAST);
+    ClientID id(mNetwork.size()+CLIENTID_BROADCAST+1);
     mNetwork[id] = IPPort(ip, port);
+    std::cout << "Registered client: " << id << " from "
+              << ip << ":" << port << std::endl;
 
     ArgsList alist;
     alist.push_back(Utilities::toString(id));
@@ -152,18 +161,6 @@ bool Utilities::StringRPC::ReceiveThread::initialize(const std::string &ip, unsi
   return mInitialized;
 }
 
-bool Utilities::StringRPC::ReceiveThread::initialize(unsigned long ip, unsigned int port)
-{
-  if (!mInitialized)
-  {
-    if (mSock.bind(ip, port))
-    {
-      mInitialized = true;
-    }
-  }
-  return mInitialized;
-}
-
 void Utilities::StringRPC::ReceiveThread::addCallback(MessageID type, const MessageCallback& callback)
 {
   mCallbackMutex.lock();
@@ -212,6 +209,12 @@ void Utilities::StringRPC::ReceiveThread::run()
         if (mCallbacks.count(type))
         {
           (*mCallbacks[type])(type, id, args);
+        }
+        else
+        {
+          std::cout << "No callbacks registered for message: "
+                    << type << " from " << id
+                    << std::endl;
         }
       }
     }
