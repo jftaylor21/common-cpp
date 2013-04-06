@@ -8,7 +8,8 @@ namespace Utilities
 {
   typedef std::vector<std::string> TokenList;
 
-  TokenList tokenize(const std::string& input, char delim);
+  //two delimiters in a row escape the delimiter
+  TokenList tokenize(const std::string& input, char delim, bool escape);
 }
 
 #endif

@@ -199,7 +199,7 @@ void Utilities::StringRPC::ReceiveThread::run()
     unsigned int port(0);
     if (mSock.recvfrom(buf, sizeof(buf), ip, port) > 0)
     {
-      Utilities::TokenList t(Utilities::tokenize(buf, mDelimiter));
+      Utilities::TokenList t(Utilities::tokenize(buf, mDelimiter, true));
       if (t.size() > 1)
       {
         StringRPC::MessageID type(Utilities::toInt(t[0]));
