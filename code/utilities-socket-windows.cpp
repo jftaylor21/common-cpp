@@ -45,6 +45,23 @@ bool Utilities::Socket::ipint2str(unsigned long ipint, std::string &ipstr)
   return ret;
 }
 
+bool Utilities::Socket::localIP(std::string &ip)
+{
+  bool ret(false);
+  char buf[80];
+  if(gethostname(buf, sizeof(buf)) != SOCKET_ERROR)
+  {
+    hostent* phe(gethostbyname(buf));
+    if (phe && phe->h_addr_list[0])
+    {
+      in_addr addr;
+      memcpy(&addr, phe->h_addr_list[0], sizeof(addr));
+      ret = ipint2str(addr.s_addr, ip);
+    }
+  }
+  return ret;
+}
+
 void Utilities::Socket::updateLastError(const std::string& prefix)
 {
   mLastError = WSAGetLastError();
@@ -56,14 +73,17 @@ void Utilities::Socket::updateLastError(const std::string& prefix)
 
 void Utilities::Socket::printLastError(const std::string &prefix)
 {
-  LPVOID lpMsgBuf;
+  wchar_t* lpMsgBuf(0);
   FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER|FORMAT_MESSAGE_FROM_SYSTEM|FORMAT_MESSAGE_IGNORE_INSERTS,
                 0, getLastError(), MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
                 (LPTSTR)&lpMsgBuf, 0, 0);
 
-  std::cout << prefix << (LPCTSTR)lpMsgBuf << std::endl;
-
-  LocalFree(lpMsgBuf);
+  if (lpMsgBuf)
+  {
+    std::cout << prefix;
+    std::wcout << lpMsgBuf << std::endl;
+    LocalFree(lpMsgBuf);
+  }
 }
 
 void Utilities::Socket::initializeOS()

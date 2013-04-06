@@ -25,7 +25,6 @@ namespace Utilities
 
     Socket accept();
     bool bind(const std::string& ip, unsigned int port);
-    bool bind(unsigned long ip, unsigned int port);
     bool close();
     bool connect(const std::string& ip, unsigned int port);
     bool listen(unsigned int backlog);
@@ -40,6 +39,7 @@ namespace Utilities
     unsigned int port() const;
 
     static bool validateIP(const std::string& ip);
+    static bool localIP(std::string& ip);
 
   private:
     void updateLastError(const std::string& prefix="");

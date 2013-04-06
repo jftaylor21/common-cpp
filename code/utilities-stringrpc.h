@@ -44,7 +44,7 @@ namespace Utilities
     ~StringRPC();
 
     bool initialize(const std::string& serverIP, unsigned int serverPort);
-    bool send(MessageID type, const ArgsList& args, ClientID id=0);
+    bool send(MessageID type, const ArgsList& args, ClientID id=CLIENTID_SERVER);
     void addCallback(MessageID type, const MessageCallback& callback);
     char forbiddenCharacter() const;
 
@@ -68,7 +68,6 @@ namespace Utilities
       ~ReceiveThread();
 
       bool initialize(const std::string &ip, unsigned int port);
-      bool initialize(unsigned long ip, unsigned int port);
       void addCallback(MessageID type, const MessageCallback& callback);
       std::string ip() const;
       unsigned int port() const;
