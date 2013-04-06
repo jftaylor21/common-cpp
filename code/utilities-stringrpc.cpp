@@ -34,7 +34,11 @@ bool Utilities::StringRPC::initialize(const std::string &serverIP,
         ArgsList args;
         args.push_back(mReceiveThread.ip());
         args.push_back(Utilities::toString(mReceiveThread.port()));
-        send(MESSAGEID_REGISTER, args, CLIENTID_SERVER);
+        while(mID == CLIENTID_UNKNOWN)
+        {
+          send(MESSAGEID_REGISTER, args, CLIENTID_SERVER);
+          Utilities::sleep(100);
+        }
       }
     }
     else //i am a server
