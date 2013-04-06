@@ -1,5 +1,5 @@
-#ifndef UTILITIES_CONVERSION_H
-#define UTILITIES_CONVERSION_H
+#ifndef UTILITIES_STRING_H
+#define UTILITIES_STRING_H
 
 #include <string>
 #include <sstream>
@@ -15,6 +15,10 @@ namespace Utilities
   }
 
   int toInt(const std::string& str);
+
+  std::string replace(const std::string& input,
+                      char oldValue,
+                      const std::string& newValue);
 }
 
 #endif

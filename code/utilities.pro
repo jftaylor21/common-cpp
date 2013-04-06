@@ -10,7 +10,7 @@ HEADERS *= $$PWD/utilities-enums.h \
            $$PWD/utilities-callback.h \
            $$PWD/utilities-socket.h \
            $$PWD/utilities-math.h \
-           $$PWD/utilities-conversion.h \
+           $$PWD/utilities-string.h \
            $$PWD/utilities-importexport.h \
            $$PWD/utilities-time.h \
            $$PWD/utilities-keyboard.h \
@@ -23,7 +23,7 @@ SOURCES *= $$PWD/utilities-thread.cpp \
            $$PWD/utilities-callback.cpp \
            $$PWD/utilities-socket.cpp \
            $$PWD/utilities-math.cpp \
-           $$PWD/utilities-conversion.cpp \
+           $$PWD/utilities-string.cpp \
            $$PWD/utilities-tokenizer.cpp \
            $$PWD/utilities-stringrpc.cpp
 
