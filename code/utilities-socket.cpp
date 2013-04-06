@@ -1,5 +1,5 @@
 #include "utilities-socket.h"
-#include "utilities-conversion.h"
+#include "utilities-string.h"
 
 Utilities::Socket::Socket(SocketType type)
   : mType(type),

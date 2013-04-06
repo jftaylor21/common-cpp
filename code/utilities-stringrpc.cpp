@@ -141,7 +141,6 @@ Utilities::StringRPC::ReceiveThread::ReceiveThread(char delimiter)
 
 Utilities::StringRPC::ReceiveThread::~ReceiveThread()
 {
-  mSock.close();
   for (CallbackMap::iterator it(mCallbacks.begin()); it != mCallbacks.end(); ++it)
   {
     delete it->second;
