@@ -5,39 +5,50 @@ Utilities::TokenList Utilities::tokenize(const std::string &input, char delim,
                                          bool escape)
 {
   TokenList ret;
-  std::stringstream ss(input);
-  char delimstr[2] = {delim, '\0'};
-  std::string outprev;
-  std::string out;
+  std::string current;
   bool midescape(false);
-  while (std::getline(ss, out, delim))
+  for(unsigned int i(0); i < input.size(); ++i)
   {
-    if (escape && out.empty() && !outprev.empty())
+    if (input[i] == delim)
     {
-      midescape = true;
-    }
-    else if (!outprev.empty())
-    {
-      if (midescape)
+      if (escape)
       {
-        outprev += delimstr+out;
-        midescape = false;
+        if (midescape)
+        {
+          current.push_back(delim);
+          midescape = false;
+        }
+        else
+        {
+          midescape = true;
+        }
       }
       else
       {
-        ret.push_back(outprev);
-        outprev = out;
+        if (!current.empty())
+        {
+          ret.push_back(current);
+          current.clear();
+        }
       }
     }
     else
     {
-      outprev = out;
+      if (midescape)
+      {
+        if (!current.empty())
+        {
+          ret.push_back(current);
+          current.clear();
+        }
+        midescape = false;
+      }
+      current.push_back(input[i]);
     }
   }
-  if (!outprev.empty())
+  if (!current.empty())
   {
-    ret.push_back(outprev);
+    ret.push_back(current);
   }
-
   return ret;
 }
