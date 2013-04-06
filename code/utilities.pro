@@ -25,7 +25,8 @@ SOURCES *= $$PWD/utilities-thread.cpp \
            $$PWD/utilities-math.cpp \
            $$PWD/utilities-string.cpp \
            $$PWD/utilities-tokenizer.cpp \
-           $$PWD/utilities-stringrpc.cpp
+           $$PWD/utilities-stringrpc.cpp \
+           $$PWD/utilities-screen.cpp
 
 unix{
 HEADERS *= $$PWD/utilities-screen-linux.h \
