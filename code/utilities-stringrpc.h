@@ -46,7 +46,6 @@ namespace Utilities
     bool initialize(const std::string& serverIP, unsigned int serverPort);
     bool send(MessageID type, const ArgsList& args, ClientID id=CLIENTID_SERVER);
     void addCallback(MessageID type, const MessageCallback& callback);
-    char forbiddenCharacter() const;
 
     void onRegisterCallback(const MessageID& msg, const ClientID& cl, const ArgsList& args);
     void onAckRegisterCallback(const MessageID& msg, const ClientID& id, const ArgsList& args);
