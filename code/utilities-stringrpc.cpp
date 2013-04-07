@@ -4,6 +4,13 @@
 #include <iostream>
 #include <sstream>
 
+Utilities::StringRPC::Message::Message(MessageID msg, ClientID id, const ArgsList &args)
+  : msgID(msg),
+    clientID(id),
+    args(args)
+{
+}
+
 Utilities::StringRPC::StringRPC(bool server)
   : mDelimiter(';'),
     mInitialized(false),
@@ -96,14 +103,12 @@ void Utilities::StringRPC::addCallback(MessageID type, const MessageCallback& ca
   mReceiveThread.addCallback(type, callback);
 }
 
-void Utilities::StringRPC::onRegisterCallback(const MessageID &msg,
-                                              const ClientID &cl,
-                                              const ArgsList &args)
+void Utilities::StringRPC::onRegisterCallback(const Message& msg)
 {
-  if (args.size() == 2)
+  if (msg.args.size() == 2)
   {
-    std::string ip(args[0]);
-    unsigned int port(Utilities::toInt(args[1]));
+    std::string ip(msg.args[0]);
+    unsigned int port(Utilities::toInt(msg.args[1]));
     ClientID id(mNetwork.size()+CLIENTID_BROADCAST+1);
     while (mNetwork.count(id)) //keep searching for an unused id
     {
@@ -119,22 +124,18 @@ void Utilities::StringRPC::onRegisterCallback(const MessageID &msg,
   }
 }
 
-void Utilities::StringRPC::onAckRegisterCallback(const MessageID &msg,
-                                                 const ClientID &id,
-                                                 const ArgsList &args)
+void Utilities::StringRPC::onAckRegisterCallback(const Message& msg)
 {
-  if (args.size() == 1)
+  if (msg.args.size() == 1)
   {
-    mID = Utilities::toInt(args[0]);
+    mID = Utilities::toInt(msg.args[0]);
   }
 }
 
-void Utilities::StringRPC::onDeregisterCallback(const MessageID &msg,
-                                                const ClientID &cl,
-                                                const ArgsList &args)
+void Utilities::StringRPC::onDeregisterCallback(const Message &msg)
 {
-  mNetwork.erase(cl);
-  std::cout << "Deregistered client: " << cl << std::endl;
+  mNetwork.erase(msg.clientID);
+  std::cout << "Deregistered client: " << msg.clientID << std::endl;
 }
 
 std::string Utilities::StringRPC::serialize(MessageID type, const ArgsList &args)
@@ -222,10 +223,11 @@ void Utilities::StringRPC::ReceiveThread::run()
         {
           args = StringRPC::ArgsList(t.begin()+2, t.end());
         }
+        StringRPC::Message msg(type, id, args);
 
         if (mCallbacks.count(type))
         {
-          (*mCallbacks[type])(type, id, args);
+          (*mCallbacks[type])(msg);
         }
         else
         {

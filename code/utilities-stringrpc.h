@@ -33,12 +33,22 @@ namespace Utilities
     typedef uint32_t MessageID;
     typedef uint32_t ClientID;
     typedef TokenList ArgsList;
-    typedef Callback3<MessageID, ClientID, ArgsList> MessageCallback;
+
+    struct Message
+    {
+      Message(MessageID msg, ClientID id=CLIENTID_SERVER, const ArgsList& args=ArgsList());
+
+      MessageID msgID;
+      ClientID clientID;
+      ArgsList args;
+    };
+
+    typedef Callback1<Message> MessageCallback;
 
     template<typename Object>
-    struct MessageObjectCallback : public ObjectCallback3<Object, MessageID, ClientID, ArgsList>
+    struct MessageObjectCallback : public ObjectCallback1<Object, Message>
     {
-      MessageObjectCallback(Object* o, typename ObjectCallback3<Object, MessageID, ClientID, ArgsList>::Function f) : ObjectCallback3<Object, MessageID, ClientID, ArgsList>(o, f){}
+      MessageObjectCallback(Object* o, typename ObjectCallback1<Object, Message>::Function f) : ObjectCallback1<Object, Message>(o, f){}
     };
 
     StringRPC(bool server);
@@ -46,11 +56,12 @@ namespace Utilities
 
     bool initialize(const std::string& serverIP, unsigned int serverPort);
     bool send(MessageID type, ClientID id=CLIENTID_SERVER, const ArgsList& args=ArgsList());
+    bool send(const Message& msg);
     void addCallback(MessageID type, const MessageCallback& callback);
 
-    void onRegisterCallback(const MessageID& msg, const ClientID& cl, const ArgsList& args);
-    void onAckRegisterCallback(const MessageID& msg, const ClientID& id, const ArgsList& args);
-    void onDeregisterCallback(const MessageID& msg, const ClientID& cl, const ArgsList& args);
+    void onRegisterCallback(const Message& msg);
+    void onAckRegisterCallback(const Message& msg);
+    void onDeregisterCallback(const Message& msg);
 
   private:
     struct IPPort
