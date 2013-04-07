@@ -17,6 +17,14 @@ Utilities::Socket Utilities::Socket::accept()
   return ret;
 }
 
+bool Utilities::Socket::setBlocking(bool block)
+{
+  unsigned long isblock(block?0:1);
+  int ret(ioctlsocket(mSock, FIONBIO, &isblock));
+  updateLastError("Socket::setBlocking: ");
+  return !ret;
+}
+
 bool Utilities::Socket::close()
 {
   bool ret(!closesocket(mSock));
@@ -65,7 +73,7 @@ bool Utilities::Socket::localIP(std::string &ip)
 void Utilities::Socket::updateLastError(const std::string& prefix)
 {
   mLastError = WSAGetLastError();
-  if (mLastError)
+  if (mLastError && mLastError != WSAEWOULDBLOCK)
   {
     printLastError(prefix);
   }

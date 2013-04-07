@@ -27,6 +27,7 @@ namespace Utilities
     bool bind(const std::string& ip, unsigned int port);
     bool connect(const std::string& ip, unsigned int port);
     bool listen(unsigned int backlog);
+    bool setBlocking(bool block);
     int recv(char* buf, unsigned int bytes);
     int recvfrom(char* buf, unsigned int bytes);
     int recvfrom(char *buf, unsigned int bytes, std::string& ip, unsigned int& port);
