@@ -114,18 +114,23 @@ void Utilities::StringRPC::onRegisterCallback(const Message& msg)
   {
     std::string ip(msg.args[0]);
     unsigned int port(Utilities::toInt(msg.args[1]));
-    ClientID id(mNetwork.size()+CLIENTID_BROADCAST+1);
-    while (mNetwork.count(id)) //keep searching for an unused id
+    IPPort client(ip, port);
+    if (!mRegisteredClients.count(client))
     {
-      ++id;
-    }
-    mNetwork[id] = IPPort(ip, port);
-    std::cout << "Registered client: " << id << " from "
-              << ip << ":" << port << std::endl;
+      ClientID id(mNetwork.size()+CLIENTID_BROADCAST+1);
+      while (mNetwork.count(id)) //keep searching for an unused id
+      {
+        ++id;
+      }
+      mRegisteredClients.insert(client);
+      mNetwork[id] = client;
+      std::cout << "Registered client: " << id << " from "
+                << ip << ":" << port << std::endl;
 
-    ArgsList alist;
-    alist.push_back(Utilities::toString(id));
-    send(MESSAGEID_ACKREGISTER, id, alist);
+      ArgsList alist;
+      alist.push_back(Utilities::toString(id));
+      send(MESSAGEID_ACKREGISTER, id, alist);
+    }
   }
 }
 
@@ -139,8 +144,12 @@ void Utilities::StringRPC::onAckRegisterCallback(const Message& msg)
 
 void Utilities::StringRPC::onDeregisterCallback(const Message &msg)
 {
-  mNetwork.erase(msg.clientID);
-  std::cout << "Deregistered client: " << msg.clientID << std::endl;
+  if (mNetwork.count(msg.clientID))
+  {
+    mRegisteredClients.erase(mNetwork[msg.clientID]);
+    mNetwork.erase(msg.clientID);
+    std::cout << "Deregistered client: " << msg.clientID << std::endl;
+  }
 }
 
 std::string Utilities::StringRPC::serialize(MessageID type, const ArgsList &args)
@@ -153,6 +162,27 @@ std::string Utilities::StringRPC::serialize(MessageID type, const ArgsList &args
     ss << mDelimiter << Utilities::replace(*it, mDelimiter, ddelim);
   }
   return ss.str();
+}
+
+Utilities::StringRPC::IPPort::IPPort()
+  : port(0)
+{
+}
+
+Utilities::StringRPC::IPPort::IPPort(const std::string &ip, unsigned int port)
+  : ip(ip),
+    port(port)
+{
+}
+
+bool Utilities::StringRPC::IPPort::operator <(const IPPort& rhs) const
+{
+  return toString() < rhs.toString();
+}
+
+std::string Utilities::StringRPC::IPPort::toString() const
+{
+  return Socket::ipPort(ip, port);
 }
 
 Utilities::StringRPC::ReceiveThread::ReceiveThread(char delimiter)
@@ -230,6 +260,7 @@ void Utilities::StringRPC::ReceiveThread::run()
         }
         StringRPC::Message msg(type, id, args);
 
+        mCallbackMutex.lock();
         if (mCallbacks.count(type))
         {
           (*mCallbacks[type])(msg);
@@ -240,6 +271,7 @@ void Utilities::StringRPC::ReceiveThread::run()
                     << type << " from " << id
                     << std::endl;
         }
+        mCallbackMutex.unlock();
       }
     }
     else

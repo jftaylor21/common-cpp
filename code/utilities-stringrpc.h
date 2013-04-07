@@ -4,6 +4,7 @@
 #include <stdint.h>
 #include <string>
 #include <map>
+#include <set>
 #include "utilities-tokenizer.h"
 #include "utilities-callback.h"
 #include "utilities-socket.h"
@@ -64,15 +65,6 @@ namespace Utilities
     void onDeregisterCallback(const Message& msg);
 
   private:
-    struct IPPort
-    {
-      IPPort() : port(0) {}
-      IPPort(const std::string& ipin, unsigned int portin) : ip(ipin), port(portin) {}
-
-      std::string ip;
-      unsigned int port;
-    };
-
     class ReceiveThread : public Thread
     {
     public:
@@ -97,7 +89,19 @@ namespace Utilities
       CallbackMap mCallbacks;
     };
 
+    struct IPPort
+    {
+      IPPort();
+      IPPort(const std::string& ip, unsigned int port);
+
+      bool operator<(const IPPort& rhs) const;
+      std::string toString() const;
+
+      std::string ip;
+      unsigned int port;
+    };
     typedef std::map<ClientID, IPPort> IPPortMap;
+    typedef std::set<IPPort> IPPortSet;
 
     std::string serialize(MessageID type, const ArgsList& args);
 
@@ -105,6 +109,7 @@ namespace Utilities
     bool mInitialized;
     ClientID mID;
     IPPortMap mNetwork;
+    IPPortSet mRegisteredClients;
     ReceiveThread mReceiveThread;
   };
 }
