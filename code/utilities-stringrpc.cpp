@@ -98,6 +98,11 @@ bool Utilities::StringRPC::send(MessageID type, ClientID id, const ArgsList &arg
   return ret;
 }
 
+bool Utilities::StringRPC::send(const Message &msg)
+{
+  return send(msg.msgID, msg.clientID, msg.args);
+}
+
 void Utilities::StringRPC::addCallback(MessageID type, const MessageCallback& callback)
 {
   mReceiveThread.addCallback(type, callback);
