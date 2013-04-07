@@ -40,6 +40,7 @@ namespace Utilities
 
     static bool validateIP(const std::string& ip);
     static bool localIP(std::string& ip);
+    static std::string ipPort(const std::string& ip, unsigned int port);
 
   private:
     bool close();

@@ -138,7 +138,7 @@ int Utilities::Socket::sendto(const char *buf, unsigned int bytes, const std::st
 
 std::string Utilities::Socket::hostIP() const
 {
-  return mIP + ":" + Utilities::toString(mPort);
+  return ipPort(mIP, mPort);
 }
 
 std::string Utilities::Socket::ip() const
@@ -149,6 +149,11 @@ std::string Utilities::Socket::ip() const
 unsigned int Utilities::Socket::port() const
 {
   return mPort;
+}
+
+std::string Utilities::Socket::ipPort(const std::string &ip, unsigned int port)
+{
+  return ip + ":" + Utilities::toString(port);
 }
 
 bool Utilities::Socket::validateIP(const std::string &ip)
