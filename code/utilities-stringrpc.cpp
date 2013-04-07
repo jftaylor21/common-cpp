@@ -235,6 +235,9 @@ void Utilities::StringRPC::ReceiveThread::run()
         }
       }
     }
-    Utilities::sleep(100);
+    else
+    {
+      Utilities::sleep(100);
+    }
   }
 }
