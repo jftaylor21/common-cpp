@@ -19,7 +19,8 @@ namespace Utilities
     {
       MESSAGEID_REGISTER = 0,
       MESSAGEID_ACKREGISTER = 1,
-      MESSAGEID_DEREGISTER = 2
+      MESSAGEID_DEREGISTER = 2,
+      MESSAGEID_HEARTBEAT = 3
     };
 
     enum ReservedClientID
@@ -44,11 +45,12 @@ namespace Utilities
     ~StringRPC();
 
     bool initialize(const std::string& serverIP, unsigned int serverPort);
-    bool send(MessageID type, const ArgsList& args, ClientID id=CLIENTID_SERVER);
+    bool send(MessageID type, ClientID id=CLIENTID_SERVER, const ArgsList& args=ArgsList());
     void addCallback(MessageID type, const MessageCallback& callback);
 
     void onRegisterCallback(const MessageID& msg, const ClientID& cl, const ArgsList& args);
     void onAckRegisterCallback(const MessageID& msg, const ClientID& id, const ArgsList& args);
+    void onDeregisterCallback(const MessageID& msg, const ClientID& cl, const ArgsList& args);
 
   private:
     struct IPPort

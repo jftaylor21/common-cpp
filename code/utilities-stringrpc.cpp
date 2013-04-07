@@ -14,6 +14,10 @@ Utilities::StringRPC::StringRPC(bool server)
 
 Utilities::StringRPC::~StringRPC()
 {
+  if (mID != CLIENTID_SERVER)
+  {
+    send(Utilities::StringRPC::MESSAGEID_DEREGISTER, CLIENTID_SERVER);
+  }
   mReceiveThread.join();
 }
 
@@ -38,7 +42,7 @@ bool Utilities::StringRPC::initialize(const std::string &serverIP,
         args.push_back(Utilities::toString(mReceiveThread.port()));
         while(mID == CLIENTID_UNKNOWN)
         {
-          send(MESSAGEID_REGISTER, args, CLIENTID_SERVER);
+          send(MESSAGEID_REGISTER, CLIENTID_SERVER, args);
           Utilities::sleep(100);
         }
       }
@@ -56,7 +60,7 @@ bool Utilities::StringRPC::initialize(const std::string &serverIP,
   return mInitialized;
 }
 
-bool Utilities::StringRPC::send(MessageID type, const ArgsList &args, ClientID id)
+bool Utilities::StringRPC::send(MessageID type, ClientID id, const ArgsList &args)
 {
   bool ret(false);
   if (id == CLIENTID_BROADCAST)
@@ -66,7 +70,7 @@ bool Utilities::StringRPC::send(MessageID type, const ArgsList &args, ClientID i
     {
       if (it->first != mID)
       {
-        send(type, args, it->first);
+        send(type, it->first, args);
       }
     }
   }
@@ -106,7 +110,7 @@ void Utilities::StringRPC::onRegisterCallback(const MessageID &msg,
 
     ArgsList alist;
     alist.push_back(Utilities::toString(id));
-    send(MESSAGEID_ACKREGISTER, alist, id);
+    send(MESSAGEID_ACKREGISTER, id, alist);
   }
 }
 
@@ -118,6 +122,14 @@ void Utilities::StringRPC::onAckRegisterCallback(const MessageID &msg,
   {
     mID = Utilities::toInt(args[0]);
   }
+}
+
+void Utilities::StringRPC::onDeregisterCallback(const MessageID &msg,
+                                                const ClientID &cl,
+                                                const ArgsList &args)
+{
+  mNetwork.erase(cl);
+  std::cout << "Deregistered client: " << cl << std::endl;
 }
 
 std::string Utilities::StringRPC::serialize(MessageID type, const ArgsList &args)
