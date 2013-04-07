@@ -105,6 +105,10 @@ void Utilities::StringRPC::onRegisterCallback(const MessageID &msg,
     std::string ip(args[0]);
     unsigned int port(Utilities::toInt(args[1]));
     ClientID id(mNetwork.size()+CLIENTID_BROADCAST+1);
+    while (mNetwork.count(id)) //keep searching for an unused id
+    {
+      ++id;
+    }
     mNetwork[id] = IPPort(ip, port);
     std::cout << "Registered client: " << id << " from "
               << ip << ":" << port << std::endl;
