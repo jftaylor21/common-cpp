@@ -172,6 +172,7 @@ bool Utilities::StringRPC::ReceiveThread::initialize(const std::string &ip, unsi
     if (mSock.bind(ip, port))
     {
       mInitialized = true;
+      mSock.setBlocking(false);
     }
   }
   return mInitialized;
