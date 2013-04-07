@@ -7,7 +7,6 @@ Utilities::Thread::Thread()
 
 Utilities::Thread::~Thread()
 {
-  mRunning = false;
   join();
 }
 
