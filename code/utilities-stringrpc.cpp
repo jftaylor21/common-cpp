@@ -52,6 +52,7 @@ bool Utilities::StringRPC::initialize(const std::string &serverIP,
       if (mReceiveThread.initialize(serverIP, serverPort))
       {
         mReceiveThread.addCallback(MESSAGEID_REGISTER, MessageObjectCallback<StringRPC>(this, &StringRPC::onRegisterCallback));
+        mReceiveThread.addCallback(MESSAGEID_DEREGISTER, MessageObjectCallback<StringRPC>(this, &StringRPC::onDeregisterCallback));
         mReceiveThread.start();
         mInitialized = true;
       }
