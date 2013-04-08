@@ -96,6 +96,7 @@ void Utilities::CLIMenu::display()
     //execute callback
     if (choice-1 < mChoices.size())
     {
+      std::cout << std::endl;
       (*mChoices[choice-1].mCallback)();
     }
   }
