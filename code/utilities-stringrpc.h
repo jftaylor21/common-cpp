@@ -56,6 +56,7 @@ namespace Utilities
     ~StringRPC();
 
     bool initialize(const std::string& serverIP, unsigned int serverPort);
+    bool initialized() const;
     bool send(MessageID type, ClientID id=CLIENTID_SERVER, const ArgsList& args=ArgsList());
     bool send(const Message& msg);
     void addCallback(MessageID type, const MessageCallback& callback);

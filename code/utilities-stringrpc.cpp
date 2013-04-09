@@ -68,6 +68,11 @@ bool Utilities::StringRPC::initialize(const std::string &serverIP,
   return mInitialized;
 }
 
+bool Utilities::StringRPC::initialized() const
+{
+  return mInitialized;
+}
+
 bool Utilities::StringRPC::send(MessageID type, ClientID id, const ArgsList &args)
 {
   bool ret(false);
