@@ -16,11 +16,14 @@ namespace Utilities
     virtual ~Thread();
 
     void start();
+    void stop();
     void join();
+    bool running() const;
 
   protected:
     virtual void run(){}
-    bool mRunning;
+
+    bool volatile mRunning;
 
   private:
     static void* createThread(void* args);

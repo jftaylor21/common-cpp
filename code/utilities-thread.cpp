@@ -19,3 +19,13 @@ void* Utilities::Thread::createThread(void* args)
   }
   return 0;
 }
+
+void Utilities::Thread::stop()
+{
+  mRunning = false;
+}
+
+bool Utilities::Thread::running() const
+{
+  return mRunning;
+}

@@ -246,7 +246,7 @@ unsigned int Utilities::StringRPC::ReceiveThread::port() const
 
 void Utilities::StringRPC::ReceiveThread::run()
 {
-  while(mRunning)
+  while(running())
   {
     char buf[4096];
     std::string ip;

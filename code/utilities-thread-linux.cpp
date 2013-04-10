@@ -8,7 +8,7 @@ void Utilities::Thread::start()
 
 void Utilities::Thread::join()
 {
-  mRunning = false;
+  stop();
   pthread_join(mThread, 0);
 }
 
