@@ -23,10 +23,14 @@ namespace Utilities
   protected:
     virtual void run(){}
 
-    bool volatile mRunning;
-
   private:
+    //no copying!
+    Thread(const Thread&);
+    Thread& operator=(const Thread&);
+
     static void* createThread(void* args);
+
+    bool mRunning;
 
   #ifdef WIN32
     HANDLE mThread;
