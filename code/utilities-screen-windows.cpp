@@ -33,7 +33,7 @@ void Utilities::setTextColor(Color c)
     color = 5;
     break;
   case COLOR_GRAY:
-    color = 7;
+    color = 8;
     break;
   case COLOR_YELLOW:
     color = 14;
