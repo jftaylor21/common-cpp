@@ -14,6 +14,8 @@ namespace Utilities
     void addChoice(const std::string& choicename,
                    const Utilities::Callback0& callback, std::string* value=0);
     void addChoice(CLIMenu& menu);
+    void enableChoice(const std::string& choicename);
+    void disableChoice(const std::string& choicename);
     void setExitString(const std::string& str);
     std::string title() const;
     void display();
