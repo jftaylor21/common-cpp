@@ -18,7 +18,8 @@ HEADERS *= $$PWD/utilities-enums.h \
            $$PWD/utilities-file.h \
            $$PWD/utilities-tokenizer.h \
            $$PWD/utilities-stringrpc.h \
-           $$PWD/utilities-cli-menu.h
+           $$PWD/utilities-cli-menu.h \
+           $$PWD/utilities-logger.h
 
 SOURCES *= $$PWD/utilities-thread.cpp \
            $$PWD/utilities-callback.cpp \
@@ -28,7 +29,8 @@ SOURCES *= $$PWD/utilities-thread.cpp \
            $$PWD/utilities-tokenizer.cpp \
            $$PWD/utilities-stringrpc.cpp \
            $$PWD/utilities-screen.cpp \
-           $$PWD/utilities-cli-menu.cpp
+           $$PWD/utilities-cli-menu.cpp \
+           $$PWD/utilities-logger.cpp
 
 unix{
 HEADERS *= $$PWD/utilities-screen-linux.h \
