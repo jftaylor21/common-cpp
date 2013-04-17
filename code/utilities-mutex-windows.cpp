@@ -7,6 +7,7 @@ Utilities::Mutex::Mutex()
 
 Utilities::Mutex::~Mutex()
 {
+  unlock();
   CloseHandle(mMutex);
 }
 
