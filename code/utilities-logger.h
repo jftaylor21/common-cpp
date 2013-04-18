@@ -1,6 +1,9 @@
 #ifndef UTILITIES_LOGGER_H
 #define UTILITIES_LOGGER_H
 
+#include <cstdarg>
+#include <string>
+
 namespace Utilities
 {
   class Logger
@@ -14,12 +17,33 @@ namespace Utilities
       LOGLEVEL_INFO
     };
 
+    enum FormattingOptions
+    {
+      FORMAT_LOGLEVEL=1,
+      FORMAT_TIME=2,
+      FORMAT_THREADID=4,
+      FORMAT_COLOR=8
+    };
+
     static Logger& get();
     ~Logger();
 
-    void setMaxLogLevel(LogLevel level);
-    LogLevel maxLogLevel();
+    //bitwise or of options
+    void setFormattingOptions(int options);
+    int formattingOptions() const;
 
+    void setMaxLogLevel(LogLevel level);
+    LogLevel maxLogLevel() const;
+    static std::string logLevel2str(LogLevel level);
+
+    void setScreenEnable(bool enable);
+    bool screenEnabled() const;
+
+    void setFilename(const std::string& filename);
+    void setFileEnable(bool enable);
+    bool fileEnabled() const;
+
+    void output(LogLevel level, const char* msg, va_list args);
     void output(LogLevel level, const char* msg, ...);
     void fatal(const char* msg, ...);
     void error(const char* msg, ...);
@@ -31,7 +55,12 @@ namespace Utilities
     Logger(const Logger&);
     Logger& operator=(const Logger&);
 
+    std::string generatePrefix(LogLevel level);
+
+    int mFormattingOptions;
     LogLevel mMaxLogLevel;
+    bool mScreenEnabled;
+    bool mFileEnabled;
   };
 }
 
