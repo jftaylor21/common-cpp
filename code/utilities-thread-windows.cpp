@@ -12,3 +12,8 @@ void Utilities::Thread::join()
   WaitForSingleObject(mThread, INFINITE);
   CloseHandle(mThread);
 }
+
+long Utilities::Thread::currentThreadID()
+{
+  return GetCurrentThreadId();
+}

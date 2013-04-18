@@ -20,6 +20,8 @@ namespace Utilities
     void join();
     bool running() const;
 
+    static long currentThreadID();
+
   protected:
     virtual void run(){}
 

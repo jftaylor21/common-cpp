@@ -12,4 +12,7 @@ void Utilities::Thread::join()
   pthread_join(mThread, 0);
 }
 
-
+long Utilities::Thread::currentThreadID()
+{
+  return gettid();
+}
