@@ -80,10 +80,10 @@ void Utilities::Logger::output(LogLevel level, const char *msg, va_list args)
     vfprintf(stderr, (generatePrefix(level)+msg).c_str(), args);
     fflush(stderr);
     setTextColor(COLOR_RESET);
-    if (level == LOGLEVEL_FATAL)
-    {
-      exit(1);
-    }
+  }
+  if (level == LOGLEVEL_FATAL)
+  {
+    exit(1);
   }
 }
 
