@@ -130,6 +130,7 @@ void Utilities::Logger::info(const char *msg, ...)
 std::string Utilities::Logger::generatePrefix(LogLevel level)
 {
   std::string ret;
+
   if (mFormattingOptions & FORMAT_COLOR)
   {
     switch(level)
@@ -146,17 +147,21 @@ std::string Utilities::Logger::generatePrefix(LogLevel level)
       break;
     }
   }
-  else if (mFormattingOptions & FORMAT_LOGLEVEL)
+
+  if (mFormattingOptions & FORMAT_LOGLEVEL)
   {
     ret += "[" + logLevel2str(level) + "] ";
   }
-  else if (mFormattingOptions & FORMAT_TIME)
+
+  if (mFormattingOptions & FORMAT_TIME)
   {
     ret += "[" + timeString() + "] ";
   }
-  else if (mFormattingOptions & FORMAT_THREADID)
+
+  if (mFormattingOptions & FORMAT_THREADID)
   {
     ret += "[" + toString(Thread::currentThreadID())+"] ";
   }
+
   return ret;
 }
