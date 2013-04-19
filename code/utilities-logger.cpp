@@ -79,6 +79,7 @@ void Utilities::Logger::output(LogLevel level, const char *msg, va_list args)
     //according to spec, this is thread safe
     vfprintf(stderr, (generatePrefix(level)+msg).c_str(), args);
     fflush(stderr);
+    setTextColor(COLOR_RESET);
   }
 }
 
@@ -127,6 +128,19 @@ std::string Utilities::Logger::generatePrefix(LogLevel level)
   std::string ret;
   if (mFormattingOptions & FORMAT_COLOR)
   {
+    switch(level)
+    {
+    case LOGLEVEL_FATAL:
+    case LOGLEVEL_ERROR:
+      setTextColor(COLOR_RED);
+      break;
+    case LOGLEVEL_WARNING:
+      setTextColor(COLOR_YELLOW);
+      break;
+    case LOGLEVEL_INFO:
+      setTextColor(COLOR_GREEN);
+      break;
+    }
   }
   else if (mFormattingOptions & FORMAT_LOGLEVEL)
   {
@@ -134,6 +148,7 @@ std::string Utilities::Logger::generatePrefix(LogLevel level)
   }
   else if (mFormattingOptions & FORMAT_TIME)
   {
+    ret += "[" + timeString() + "] ";
   }
   else if (mFormattingOptions & FORMAT_THREADID)
   {
