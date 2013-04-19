@@ -30,7 +30,8 @@ SOURCES *= $$PWD/utilities-thread.cpp \
            $$PWD/utilities-stringrpc.cpp \
            $$PWD/utilities-screen.cpp \
            $$PWD/utilities-cli-menu.cpp \
-           $$PWD/utilities-logger.cpp
+           $$PWD/utilities-logger.cpp \
+           $$PWD/utilities-time.cpp
 
 unix{
 HEADERS *= $$PWD/utilities-screen-linux.h \
