@@ -22,6 +22,7 @@ Utilities::Logger::Logger()
 
 Utilities::Logger::~Logger()
 {
+  fclose(mFile);
 }
 
 void Utilities::Logger::setFormattingOptions(int options)
@@ -77,6 +78,7 @@ bool Utilities::Logger::screenEnabled() const
 
 void Utilities::Logger::setFilename(const std::string &filename)
 {
+  mFile = fopen(filename.c_str(), "w");
 }
 
 void Utilities::Logger::setFileEnable(bool enable)
@@ -91,12 +93,22 @@ bool Utilities::Logger::fileEnabled() const
 
 void Utilities::Logger::output(LogLevel level, const char *msg, va_list args)
 {
-  if (level <= mMaxLogLevel && mScreenEnabled)
+  if (level <= mMaxLogLevel && (mScreenEnabled || mFileEnabled))
   {
-    //according to spec, this is thread safe
-    vfprintf(stderr, (generatePrefix(level)+msg).c_str(), args);
-    fflush(stderr);
-    setTextColor(COLOR_RESET);
+    std::string fullmsg(generatePrefix(level)+msg);
+    if (mScreenEnabled)
+    {
+      //according to spec, this is thread safe
+      vfprintf(stdout, fullmsg.c_str(), args);
+      fflush(stdout);
+      setTextColor(COLOR_RESET);
+    }
+    if (mFileEnabled && mFile)
+    {
+      //according to spec, this is thread safe
+      vfprintf(mFile, fullmsg.c_str(), args);
+      fflush(mFile);
+    }
   }
   if (level == LOGLEVEL_FATAL)
   {
