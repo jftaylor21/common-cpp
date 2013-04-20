@@ -61,6 +61,7 @@ namespace Utilities
     LogLevel mMaxLogLevel;
     bool mScreenEnabled;
     bool mFileEnabled;
+    FILE* mFile;
   };
 }
 

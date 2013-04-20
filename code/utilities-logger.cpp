@@ -13,7 +13,10 @@ Utilities::Logger& Utilities::Logger::get()
 
 Utilities::Logger::Logger()
   : mFormattingOptions(FORMAT_LOGLEVEL|FORMAT_TIME|FORMAT_THREADID|FORMAT_COLOR),
-    mMaxLogLevel(LOGLEVEL_FATAL)
+    mMaxLogLevel(LOGLEVEL_FATAL),
+    mScreenEnabled(false),
+    mFileEnabled(false),
+    mFile(0)
 {
 }
 
@@ -70,6 +73,20 @@ void Utilities::Logger::setScreenEnable(bool enable)
 bool Utilities::Logger::screenEnabled() const
 {
   return mScreenEnabled;
+}
+
+void Utilities::Logger::setFilename(const std::string &filename)
+{
+}
+
+void Utilities::Logger::setFileEnable(bool enable)
+{
+  mFileEnabled = enable;
+}
+
+bool Utilities::Logger::fileEnabled() const
+{
+  return mFileEnabled;
 }
 
 void Utilities::Logger::output(LogLevel level, const char *msg, va_list args)
