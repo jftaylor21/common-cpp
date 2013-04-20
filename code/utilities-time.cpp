@@ -6,6 +6,6 @@ std::string Utilities::timeString()
   time_t rawtime(time(0));
   tm* timeinfo(localtime(&rawtime));
   char buf[9]; //HH:MM:SS
-  strftime(buf, sizeof(buf), "%T", timeinfo);
+  strftime(buf, sizeof(buf), "%H:%M:%S", timeinfo);
   return buf;
 }
