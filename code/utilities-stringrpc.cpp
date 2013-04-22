@@ -1,6 +1,7 @@
 #include "utilities-stringrpc.h"
 #include "utilities-time.h"
 #include "utilities-string.h"
+#include "utilities-logger.h"
 #include <iostream>
 #include <sstream>
 
@@ -97,8 +98,7 @@ bool Utilities::StringRPC::send(MessageID type, ClientID id, const ArgsList &arg
   }
   else
   {
-    std::cout << "StringRPC: Cannot send message due to conditions not met"
-              << std::endl;
+    Logger::get().error("StringRPC: Cannot send message due to conditions not met\n");
   }
   return ret;
 }
@@ -129,8 +129,7 @@ void Utilities::StringRPC::onRegisterCallback(const Message& msg)
       }
       mRegisteredClients.insert(client);
       mNetwork[id] = client;
-      std::cout << "Registered client: " << id << " from "
-                << ip << ":" << port << std::endl;
+      Logger::get().info("Registered client: %d from %s:%d\n", id, ip.c_str(), port);
 
       ArgsList alist;
       alist.push_back(Utilities::toString(id));
@@ -153,7 +152,7 @@ void Utilities::StringRPC::onDeregisterCallback(const Message &msg)
   {
     mRegisteredClients.erase(mNetwork[msg.clientID]);
     mNetwork.erase(msg.clientID);
-    std::cout << "Deregistered client: " << msg.clientID << std::endl;
+    Logger::get().info("Deregistered client: %d\n", msg.clientID);
   }
 }
 
@@ -224,8 +223,7 @@ void Utilities::StringRPC::ReceiveThread::addCallback(MessageID type, const Mess
   mCallbackMutex.lock();
   if (mCallbacks.count(type))
   {
-    std::cout << "Utilities::StringRPC::ReceiveThread::addCallback: message type " << type << " already has a callback"
-              << std::endl;
+    Logger::get().error("Utilities::StringRPC::ReceiveThread::addCallback: message type %d already has a callback\n", type);
   }
   else
   {
@@ -272,9 +270,7 @@ void Utilities::StringRPC::ReceiveThread::run()
         }
         else
         {
-          std::cout << "No callbacks registered for message: "
-                    << type << " from " << id
-                    << std::endl;
+          Logger::get().error("No callbacks registered for message: %d from %d\n", type, id);
         }
         mCallbackMutex.unlock();
       }

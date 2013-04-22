@@ -1,4 +1,5 @@
 #include "utilities-keyboard.h"
+#include "utilities-logger.h"
 
 char Utilities::getch(bool block)
 {
@@ -119,7 +120,7 @@ bool Utilities::getKey(Key k)
 {
   bool ret(false);
 
-  std::cout << "Utilities::getKey: not implemented in linux" << std::endl;
+  Utilities::Logger::get().error("Utilities::getKey: not implemented in linux\n");
 
   return ret;
 }

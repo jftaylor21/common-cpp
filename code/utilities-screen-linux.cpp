@@ -1,5 +1,6 @@
 #include "utilities-screen-linux.h"
 #include "utilities-screen.h"
+#include "utilities-logger.h"
 #include <iostream>
 
 bool Utilities::ttyMode(TTYMode mode)
@@ -17,7 +18,7 @@ bool Utilities::ttyMode(TTYMode mode)
     ret = t.c_lflag & ECHO;
     break;
   default:
-    std::cout << "Utilities::ttyMode: unknown mode" << mode << std::endl;
+    Logger::get().error("Utilities::ttyMode: unknown mode %d\n", mode);
     break;
   }
 
@@ -37,7 +38,7 @@ void Utilities::setTTYMode(TTYMode mode, bool enabled)
     t.c_lflag = enabled ? (t.c_lflag | ECHO) : (t.c_lflag & ~ECHO);
     break;
   default:
-    std::cout << "Utilities::setTTYMode: unknown mode" << mode << std::endl;
+    Logger::get().error("Utilities::setTTYMode: unknown mode %d\n", mode);
     break;
   }
   tcsetattr(STDIN_FILENO, TCSANOW, &t); //set attributes

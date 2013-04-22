@@ -1,5 +1,6 @@
 #include "utilities-keyboard.h"
 #include "utilities-time.h"
+#include "utilities-logger.h"
 #include <conio.h>
 #include <Windows.h>
 #include <iostream>
@@ -44,7 +45,7 @@ Utilities::Key Utilities::getKey(bool block, bool clearBuffer)
         ret = KEY_DOWN;
         break;
       default:
-        std::cout << "Utilities::getKey: I don't understand: " << ret << std::endl;
+        Logger::get().error("Utilities::getKey: I don't understand: %d\n", ret);
         ret = KEY_NONE;
       }
     }
@@ -198,7 +199,7 @@ bool Utilities::getKey(Key k)
     vk = VK_RIGHT;
     break;
   default:
-    std::cout << "Utilities::getKey: I don't understand: " << k << std::endl;
+    Logger::get().error("Utilities::getKey: I don't understand: %d\n", k);
   }
 
   ret = GetAsyncKeyState(vk) & SHRT_MAX;
