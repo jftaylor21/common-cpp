@@ -61,10 +61,6 @@ namespace Utilities
     bool send(const Message& msg);
     void addCallback(MessageID type, const MessageCallback& callback);
 
-    void onRegisterCallback(const Message& msg);
-    void onAckRegisterCallback(const Message& msg);
-    void onDeregisterCallback(const Message& msg);
-
   private:
     class ReceiveThread : public Thread
     {
@@ -103,6 +99,10 @@ namespace Utilities
     };
     typedef std::map<ClientID, IPPort> IPPortMap;
     typedef std::set<IPPort> IPPortSet;
+
+    void onRegisterCallback(const Message& msg);
+    void onAckRegisterCallback(const Message& msg);
+    void onDeregisterCallback(const Message& msg);
 
     std::string serialize(MessageID type, const ArgsList& args);
 
